@@ -1,6 +1,5 @@
 import { ApolloServer, gql } from "apollo-server-express";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import cors from "cors";
@@ -8,7 +7,6 @@ import rateLimit from "express-rate-limit";
 import session from "express-session";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import helmetCSP from "helmet-csp";
 import bodyParser from "body-parser";
 import { corsOptions } from "./config/config.js";
 import xss from "xss-clean";
@@ -48,10 +46,6 @@ async function StartServer() {
 
   //* Middleware to sanitize user input for preventing Cross-Site Scripting (XSS) attacks
   app.use(xss());
-
-  //* Middleware to add various HTTP headers to enhance security (using helmet)
-  app.use(helmet());
-
   //* Middleware to sanitize user input against MongoDB query injection
   app.use(mongoSanitize());
 
@@ -66,9 +60,6 @@ async function StartServer() {
 
   //* Middleware for parsing cookies attached to the client's request
   app.use(cookieParser());
-
-  //* Middleware for enhancing security by adding Content Security Policy (CSP) headers
-  app.use(helmetCSP());
   await Server.start();
   Server.applyMiddleware({ app, path: "/graphql" });
   //* Middleware to sanitize user input for preventing Cross-Site Scripting (XSS) attacks
