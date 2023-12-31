@@ -1,0 +1,8 @@
+user registeration
+if user registration status code 201
+id user already register status code 4000
+mutation userRegistration($input:formInput!){
+signupUser(registerationForm:$input){
+message
+}
+}
