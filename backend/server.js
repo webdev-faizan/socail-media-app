@@ -8,30 +8,36 @@ import session from "express-session";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-import { corsOptions } from "./config/config.js";
+import { corsOptions } from "./src/config/config.js";
 import xss from "xss-clean";
 import express from "express";
 import "dotenv/config";
+import resolvers from "./src/graphql/resolvers.js";
+import typeDefs from "./src/graphql/typedefs.js";
+import mongoose, { mongo } from "mongoose";
 
 process.on("uncaughtException", (error) => {
   console.log(error);
   process.exit(-1);
 });
+// ! db connection
+mongoose
+  .connect(process.env.URI)
+  .then(() => {
+    console.log("Successfully connected to the database 🚀");
+  })
+  .catch((error) => {
+    console.error("Failed to establish a connection to the database", error);
+  });
+console.log(process.env.URI);
+
 async function StartServer() {
   const app = express();
-  const typeDefs = gql`
-    type Query {
-      greet: String
-    }
-  `;
+
   const PORT = process.env.PORT || 3002;
   const Server = new ApolloServer({
     typeDefs,
-    resolvers: {
-      Query: {
-        greet: () => "hello world",
-      },
-    },
+    resolvers,
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
   });
   //! middleware
@@ -56,13 +62,14 @@ async function StartServer() {
   app.use(cors(corsOptions));
 
   //* Middleware for logging HTTP requests
-  app.use(morgan("combined"));
+  // app.use(morgan("combined"));
 
   //* Middleware for parsing cookies attached to the client's request
   app.use(cookieParser());
   await Server.start();
   Server.applyMiddleware({ app, path: "/graphql" });
   //* Middleware to sanitize user input for preventing Cross-Site Scripting (XSS) attacks
+
   app.get("/test", (req, res) => {
     // Simulate user input from a query parameter
     const userInput = req.query.input || "";
