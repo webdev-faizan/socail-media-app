@@ -1,9 +1,13 @@
-import userTypedefs from "../typedefs/userTypedefs.js";
+import {
+  userTypedefs,
+  emailVerificationTypedefs,
+} from "../typedefs/userTypedefs.js";
 
 const mutationTypeDefs = `
 ${userTypedefs}
+${emailVerificationTypedefs}
 
 
 `;
 
-export default mutationTypeDefs
+export default mutationTypeDefs;

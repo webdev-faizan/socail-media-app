@@ -1,6 +1,7 @@
 # Ignore directories named "node_modules" and "dist"
 node_modules/
 dist/
+.env
 
 # Ignore specific files
 config.js         # Ignore the config.js file

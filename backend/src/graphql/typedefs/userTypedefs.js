@@ -1,4 +1,4 @@
-const userTypedefs = `
+export const userTypedefs = `
   type User {
     id: ID!
     firstName: String
@@ -17,6 +17,14 @@ const userTypedefs = `
   type Mutation {
     signupUser(registerationForm: formInput!): User
   }
+
 `;
 
-export default userTypedefs;
+export const emailVerificationTypedefs = `
+type user{
+message:String!
+verified:Boolean
+}
+type Mutation{
+  emailVerification(token:String!):user
+}`;

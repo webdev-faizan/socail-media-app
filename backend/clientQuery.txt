@@ -6,3 +6,12 @@ signupUser(registerationForm:$input){
 message
 }
 }
+{
+  "input": {
+    "firstName": "faizana",
+    "lastName": "khan",
+    "email": "faizoofaizanali@gmail.com",
+    "password": "a"
+  }
+}
+//email verification

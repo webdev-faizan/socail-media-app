@@ -1,0 +1,7 @@
+PORT=3001
+URI=mongodb://localhost:27017/graphql
+BASE_URL=https://localhost:3000/
+MAIL_USERNAME=faizan_alist:3000jf
+MAIL_PASSWORD=xyz 
+USERNAME=exemple@gmail.com
+JWT_SECREt=ASLKASNASKLN
