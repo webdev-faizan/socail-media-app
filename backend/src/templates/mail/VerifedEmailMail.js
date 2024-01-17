@@ -293,6 +293,6 @@ const VerifedEmailMai = (name, link) => {
       <!--[if IE]></div><![endif]-->
     </body>
     
-    </html>`;
-};
-export default VerifedEmailMai;
+    </html>`
+}
+export default VerifedEmailMai

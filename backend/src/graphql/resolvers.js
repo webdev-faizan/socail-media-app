@@ -1,4 +1,4 @@
-import mutationsResolver from "./mutations/mutationsResolver.js";
+import mutationsResolver from './mutations/mutationsResolver.js'
 const resolvers = {
   Mutation: {
     ...mutationsResolver,
@@ -6,7 +6,7 @@ const resolvers = {
 
   // register: UserRegistration,
   Query: {
-    greet: () => "hello world",
+    greet: () => 'hello world',
   },
-};
-export default resolvers;
+}
+export default resolvers

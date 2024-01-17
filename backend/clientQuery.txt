@@ -1,3 +1,4 @@
+------------------------------------------------------------------
 user registeration
 if user registration status code 201
 id user already register status code 4000
@@ -14,4 +15,15 @@ message
     "password": "a"
   }
 }
+----------------------------------------------------------------------
 //email verification
+mutation emailVerification{
+emailVerification(token:"sdsd"){
+message
+}
+
+
+}
+---------------------------------------------------------------------------
+
+login

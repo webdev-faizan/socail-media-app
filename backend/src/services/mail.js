@@ -1,13 +1,13 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer'
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.ethereal.email",
+  service: 'gmail',
+  host: 'smtp.ethereal.email',
   auth: {
-    user: "webdev.faizanali@gmail.com",
+    user: 'webdev.faizanali@gmail.com',
     pass: process.env.MAIL_PASSWORD,
   },
-});
+})
 
 const sendNodemailerMail = async ({
   to,
@@ -18,7 +18,7 @@ const sendNodemailerMail = async ({
   text,
 }) => {
   try {
-    console.log(process.env.MAIL_PASSWORD);
+    console.log(process.env.MAIL_PASSWORD)
 
     const mailOptions = {
       from: process.env.USERNAME,
@@ -26,15 +26,15 @@ const sendNodemailerMail = async ({
       subject: subject,
       html: html,
       attachments: attachments,
-    };
+    }
 
-    return transporter.sendMail(mailOptions);
+    return transporter.sendMail(mailOptions)
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
-export default sendNodemailerMail;
+export default sendNodemailerMail
 
 // import sgMail from "@sendgrid/mail"
 

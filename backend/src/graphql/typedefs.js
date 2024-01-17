@@ -1,6 +1,6 @@
-import { gql } from "apollo-server-express";
-import mutationTypeDefs from "./mutations/mutationTypeDefs.js";
-import queryTypeDefs from "./queries/queryTypeDefs.js";
+import { gql } from 'apollo-server-express'
+import mutationTypeDefs from './mutations/mutationTypeDefs.js'
+import queryTypeDefs from './queries/queryTypeDefs.js'
 
 const typeDefs = gql`
   #query
@@ -10,6 +10,6 @@ const typeDefs = gql`
   ${mutationTypeDefs}
   #mutations
   ${queryTypeDefs}
-`;
+`
 
-export default typeDefs;
+export default typeDefs

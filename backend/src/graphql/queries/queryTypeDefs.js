@@ -1,3 +1,3 @@
-const queryTypeDefs = ``;
+const queryTypeDefs = ``
 
 export default queryTypeDefs

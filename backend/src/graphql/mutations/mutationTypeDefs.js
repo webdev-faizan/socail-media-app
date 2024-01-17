@@ -1,13 +1,16 @@
 import {
-  userTypedefs,
+  signUpUserTypeDefs,
   emailVerificationTypedefs,
-} from "../typedefs/userTypedefs.js";
+  loginTypedefs,
+  forgetPasswordTypedefs,
+} from '../typedefs/userTypedefs.js'
 
 const mutationTypeDefs = `
-${userTypedefs}
+${signUpUserTypeDefs}
 ${emailVerificationTypedefs}
+${loginTypedefs}
+${forgetPasswordTypedefs}
 
+`
 
-`;
-
-export default mutationTypeDefs;
+export default mutationTypeDefs
