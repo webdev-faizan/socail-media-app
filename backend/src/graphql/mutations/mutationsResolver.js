@@ -2,6 +2,7 @@ import userResolver, {
   signupEmailVerification,
   loginUser,
   forgetPassword,
+  newPassword,
 } from './resolver/userResolver.js'
 
 const mutationsResolver = {
@@ -9,5 +10,6 @@ const mutationsResolver = {
   emailVerification: signupEmailVerification,
   loginUser: loginUser,
   forgetPassword: forgetPassword,
+  newPassword: newPassword,
 }
 export default mutationsResolver

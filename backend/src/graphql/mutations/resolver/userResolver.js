@@ -125,7 +125,7 @@ export const loginUser = async (_, userInfo) => {
     .select('_id email firstName lastName password')
 
   if (this_user && this_user.verified) {
-    const hashPassword = await userModel.correctPassword(
+    const hashPassword = await this_user.correctPassword(
       password,
       this_user.password,
     )
@@ -178,15 +178,17 @@ export const forgetPassword = async (_, userInfo) => {
       }
     } else {
       const token = await is_user_register.PasswordResetToken()
-      const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
-      const html = ResetPasswordMail(link, is_user_register.firstName)
-      await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
+      await is_user_register.save()
+
       return {
         message: 'Token sent to email!',
         extenstions: {
           status: 200,
         },
       }
+      const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
+      const html = ResetPasswordMail(link, is_user_register.firstName)
+      await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
     }
   } catch (error) {
     return {
@@ -198,4 +200,42 @@ export const forgetPassword = async (_, userInfo) => {
   }
 }
 
-export const newPassword = async () => {}
+export const newPassword = async (_, userInfo) => {
+  try {
+    const { password, token } = await userInfo
+    const passwordResetToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex')
+    const this_user = await userModel.findOne({
+      passwordResetToken,
+      passwordResetExpires: { $gt: Date.now() },
+    })
+    if (this_user) {
+      this_user.password = password
+      this_user.passwordResetExpires = undefined
+      this_user.passwordResetToken = undefined
+      this_user.save()
+      return {
+        message: 'password successfull change',
+        extenstions: {
+          status: 200,
+        },
+      }
+    } else {
+      return {
+        message: 'invalid token or expiry',
+        extenstions: {
+          status: 200,
+        },
+      }
+    }
+  } catch (error) {
+    return {
+      message: 'internal server error',
+      extenstions: {
+        status: 500,
+      },
+    }
+  }
+}
