@@ -13,3 +13,4 @@ secrets.txt       # Ignore the secrets.txt file
 .env/             # Ignore the .env directory
 */.env            # Ignore .env files in any directory
 /.env             # Ignore the .env file in the root directory
+.next/

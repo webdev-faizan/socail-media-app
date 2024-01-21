@@ -1,3 +1,4 @@
+import { postTypeDefs ,commentTypeDef,likeTypeDefs} from '../typedefs/postTypeDefs.js'
 import {
   signUpUserTypeDefs,
   emailVerificationTypedefs,
@@ -12,6 +13,9 @@ ${emailVerificationTypedefs}
 ${loginTypedefs}
 ${forgetPasswordTypedefs}
 ${newPasswordTypeDefs}
+${postTypeDefs}
+${commentTypeDef}
+${likeTypeDefs}
 
 `
 
