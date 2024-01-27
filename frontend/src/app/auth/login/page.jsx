@@ -39,7 +39,6 @@ const signup = () => {
     mode: "onTouched",
   });
 
-  console.log(errors);
   const onSubmit = (data) => {
     console.log(data);
   };
@@ -48,15 +47,9 @@ const signup = () => {
       <div className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">
-            <h6 className="  text-[#1C4E80]  text-[26px] font-medium">Login</h6>
-            <small className="text-sm text-gray-600 mt-3 block">
-              <Link
-                href="/auth/forget-password"
-                className="text-blue-500 hover:underline ml-1"
-              >
-                forgotten your password
-              </Link>
-            </small>
+            <h6 className="  text-[#1C4E80]  text-[26px] font-medium">
+              Sign in to our platform
+            </h6>
           </div>
           {/*  */}
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -118,6 +111,33 @@ const signup = () => {
                   {errors.password?.message}
                 </small>
               </div>
+              <div>
+                <div className="flex items-start">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="remember"
+                        type="checkbox"
+                        defaultValue
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                        required
+                      />
+                    </div>
+                    <label
+                      htmlFor="remember"
+                      className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <a
+                    href="#"
+                    className="ms-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
+                  >
+                    Lost Password?
+                  </a>
+                </div>
+              </div>
               <button
                 type="submit"
                 className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
@@ -141,3 +161,4 @@ const signup = () => {
   );
 };
 export default signup;
+
