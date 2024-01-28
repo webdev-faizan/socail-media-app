@@ -115,3 +115,21 @@ export default function Home() {
     </>
   );
 }
+
+// fetch("/graphql", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({
+//     query: `
+// query getalluser{
+//   quotes{
+//     name
+//     email
+//   }
+// }  
+
+// `,
+//   }),
+// });
