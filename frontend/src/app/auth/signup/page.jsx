@@ -8,6 +8,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaRegFaceDizzy } from "react-icons/fa6";
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { SIGNUP_USER } from "../../graphql/mutations/auth";
+import { useRouter } from "next/navigation";
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
   firstName: yup
@@ -35,9 +38,10 @@ const schemaSignup = yup.object({
     .required(fieldIsRequired)
     .min(8, "min length must be at least 8 characters")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character, and be at least 8 characters long"
     ),
+
   cpassword: yup
     .string()
     .required(fieldIsRequired)
@@ -46,25 +50,45 @@ const schemaSignup = yup.object({
 });
 
 const signup = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
+  const [mutateFunction, { data, loading, error }] = useMutation(SIGNUP_USER, {
+    onCompleted: (data) => {
+      // console.log(data);
+    },
+  });
+  // console.log(Response&&Response.signupUser.message);
+  const [showPassword, setShowPassword] = useState(false);
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schemaSignup),
+    // resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
+  const onSubmit = async (data) => {
+    try {
+      const { firstName, lastName, email, password, tac } = await data;
+      await mutateFunction({
+        variables: {
+          data: {
+            firstName,
+            lastName,
+            email,
+            password,
+            tac,
+          },
+        },
+      });
 
-  console.log(errors);
-  const onSubmit = (data) => {
-    console.log(data);
+      // Response && router.push("/auth/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <section className=" py-3 sm:py-5 md:py-10">
@@ -133,7 +157,7 @@ const signup = () => {
                   <input
                     autoComplete="off"
                     type="email"
-                    required
+                    // required
                     id=""
                     {...register("email")}
                     className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
@@ -147,6 +171,7 @@ const signup = () => {
                 </div>
                 <small className="text-[#E60A0A]  first-letter:uppercase">
                   {errors.email?.message}
+                  {data && data?.signupUser?.message}
                 </small>
               </div>
               <div className="flex flex-col gap-2 ">
@@ -235,10 +260,11 @@ const signup = () => {
                 </small>
               </div>
               <button
+                disabled={loading}
                 type="submit"
                 className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
               >
-                submit
+                {loading ? "loading..." : "submit"}
               </button>
             </div>
             <small className="text-sm text-gray-600 mt-3 block">

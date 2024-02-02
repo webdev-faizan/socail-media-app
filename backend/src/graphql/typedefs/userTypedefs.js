@@ -8,8 +8,10 @@ export const signUpUserTypeDefs = `
 
   input formInput {
     firstName: String!
+    lastName:String!
     email: String!
     password: String!
+    tac: Boolean!
   }
 
   type Mutation {
@@ -33,16 +35,16 @@ message:String
 firstName:String
 lastName:String
 _id:ID
-toke:String,
+token:String,
 verififed:Boolean
 }
-input formInput{
+input signInFormInput{
 email:String
 password:String
 }
 
 type Mutation{
-  loginUser(signInForm:formInput):User
+  loginUser(signInForm:signInFormInput!):User
   }
 `
 

@@ -4,10 +4,11 @@ import userModel from '../../../model/userModel.js'
 import sendNodemailerMail from '../../../services/mail.js'
 import VerifedEmailMail from '../../../templates/mail/VerifedEmailMail.js'
 import ResetPasswordMail from '../../../templates/mail/ResetPasswordMail.js'
-
+import bcrypt from 'bcryptjs'
 const SignupUser = async (_, userInfo) => {
   try {
-    const { firstName, lastName, email, password } = userInfo.registerationForm
+    const { firstName, lastName, email, password, tac } =
+      userInfo.registerationForm
     const isAlreadyUserRegister = await userModel.findOne({ email })
     if (isAlreadyUserRegister) {
       return {
@@ -21,8 +22,9 @@ const SignupUser = async (_, userInfo) => {
         firstName,
         lastName,
         email,
-        password,
+        password: bcrypt.hashSync(password, 6),
         optExpiryToken: Date.now() + 10 * 60 * 1000,
+        tac,
       })
 
       await this_user.save()
@@ -33,7 +35,9 @@ const SignupUser = async (_, userInfo) => {
         firstName + ' ' + lastName || '',
         link,
       )
-      await sendNodemailerMail({ to: email, subject: 'Email Verified', html })
+      console.log(userInfo)
+
+      // await sendNodemailerMail({ to: email, subject: 'Email Verified', html })
 
       return {
         ...this_user.toObject(),
@@ -117,26 +121,29 @@ export const signupEmailVerification = async (_, params) => {
   }
 }
 
-export const loginUser = async (_, userInfo) => {
-  console.log(userInfo)
-  const { email, password } = userInfo.data
+export const loginUser = async (_, { signInForm }) => {
+  const { email, password } = signInForm
   const this_user = await userModel
     .findOne({ email: email })
-    .select('_id email firstName lastName password')
-
-  if (this_user && this_user.verified) {
+    .select('_id email firstName lastName password emailVerified')
+  console.log(this_user)
+  if (this_user && !this_user?.emailVerified) {
     const hashPassword = await this_user.correctPassword(
       password,
       this_user.password,
     )
     if (hashPassword) {
+      const token = await JwtTokenGenerator(this_user._id)
+      console.log(token)
       return {
         message: 'Login successfully',
+        token,
         extenstions: {
           status: 200,
         },
       }
     } else {
+      console.log()
       return {
         message: 'Email or password is incorrect',
         extenstions: {
@@ -144,13 +151,9 @@ export const loginUser = async (_, userInfo) => {
         },
       }
     }
-  } else if (!this.verified) {
-    const token = await JwtTokenGenerator(this_user._id)
-
+  } else if (this_user && !this_user?.emailVerified) {
     return {
       message: 'Please verify your email.',
-      ...this_user.toObject(),
-      token,
       extenstions: {
         status: 400,
       },

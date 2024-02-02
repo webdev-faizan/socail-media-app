@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@apollo/server": "^4.10.0",
+    "@envelop/graphql-middleware": "^6.0.0",
     "@sendgrid/mail": "^8.1.0",
     "apollo-server-core": "^3.13.0",
     "apollo-server-express": "^3.13.0",

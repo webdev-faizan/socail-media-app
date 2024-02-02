@@ -1,5 +1,4 @@
 "use client";
-import { LuUser2 } from "react-icons/lu";
 import { MdOutlineMail } from "react-icons/md";
 import { FaRegFaceFlushed } from "react-icons/fa6";
 import Link from "next/link";
@@ -8,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaRegFaceDizzy } from "react-icons/fa6";
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../../graphql/mutations/auth";
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
   email: yup
@@ -23,6 +24,7 @@ const schemaSignup = yup.object({
 });
 
 const signup = () => {
+  const [mutationFunction, { data, loading }] = useMutation(LOGIN_USER);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleTogglePassword = () => {
@@ -40,6 +42,12 @@ const signup = () => {
   });
 
   const onSubmit = (data) => {
+    const { email, password } = data;
+    mutationFunction({
+      variables: {
+        data: { email, password },
+      },
+    });
     console.log(data);
   };
   return (
@@ -76,6 +84,7 @@ const signup = () => {
                 </div>
                 <small className="text-[#E60A0A]  first-letter:uppercase">
                   {errors.email?.message}
+                  {data?.loginUser?.message}
                 </small>
               </div>
               <div className="flex flex-col gap-2 ">
@@ -109,6 +118,7 @@ const signup = () => {
                 </div>
                 <small className="text-[#E60A0A]  first-letter:uppercase">
                   {errors.password?.message}
+                  {data?.loginUser?.message}
                 </small>
               </div>
               <div>
@@ -120,7 +130,6 @@ const signup = () => {
                         type="checkbox"
                         defaultValue
                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                        required
                       />
                     </div>
                     <label
@@ -140,9 +149,10 @@ const signup = () => {
               </div>
               <button
                 type="submit"
+                disabled={loading}
                 className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
               >
-                submit
+                {loading ? "loading..." : "submit"}
               </button>
             </div>
             <small className="text-sm text-gray-600 mt-3 block">
@@ -161,4 +171,3 @@ const signup = () => {
   );
 };
 export default signup;
-
