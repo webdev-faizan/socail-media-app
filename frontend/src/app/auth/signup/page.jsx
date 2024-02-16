@@ -3,6 +3,8 @@ import { LuUser2 } from "react-icons/lu";
 import { MdOutlineMail } from "react-icons/md";
 import { FaRegFaceFlushed } from "react-icons/fa6";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import RegistrationModal from "../../modal/RegistrationModal";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -51,25 +53,35 @@ const schemaSignup = yup.object({
 
 const signup = () => {
   const router = useRouter();
-
-  const [mutateFunction, { data, loading, error }] = useMutation(SIGNUP_USER, {
-    onCompleted: (data) => {
-      // console.log(data);
-    },
-  });
-  // console.log(Response&&Response.signupUser.message);
+  const [showModal, setShowModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm({
-    // resolver: yupResolver(schemaSignup),
+    resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
+
+  const [mutateFunction, { loading, reset }] = useMutation(SIGNUP_USER, {
+    onError: ({ message }) => {
+      toast.error(message);
+    },
+    onCompleted: (data) => {
+      setShowModal(true);
+      reset();
+    },
+  });
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleCloseModal = () => {
+    setShowModal(true);
+    router.push("/auth/login");
+  };
+
   const onSubmit = async (data) => {
     try {
       const { firstName, lastName, email, password, tac } = await data;
@@ -84,202 +96,209 @@ const signup = () => {
           },
         },
       });
-
-      // Response && router.push("/auth/login");
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <section className=" py-3 sm:py-5 md:py-10">
-      <div className="flex justify-center  h-full px-3">
-        <div className="w-full xsm:w-[400px]">
-          <div className="py-3">
-            <h6 className="  text-[#1C4E80]  text-[26px] font-medium">
-              Registration
-            </h6>
-          </div>
-          {/*  */}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-col gap-2 ">
-                <label htmlFor="" className="text-[#36454F]">
-                  First Name<span className="text-[#E60A0A]"> *</span>{" "}
-                </label>
-                <div className="flex relative items-center w-full">
-                  <input
-                    {...register("firstName")}
-                    autoComplete="off"
-                    type="text"
-                    className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
-                    placeholder="First Name"
-                  />
-
-                  <LuUser2
-                    size={16}
-                    color="#4682BE"
-                    className="absolute right-3"
-                  />
-                </div>
-                <small className="text-[#E60A0A]  first-letter:uppercase">
-                  {errors.firstName?.message}
-                </small>
-              </div>
-
-              <div className="flex flex-col gap-2 ">
-                <label htmlFor="" className="text-[#36454F]">
-                  Last Name<span className="text-[#E60A0A]"> *</span>{" "}
-                </label>
-                <div className="flex relative items-center w-full">
-                  <input
-                    {...register("lastName")}
-                    autoComplete="off"
-                    type="text"
-                    id=""
-                    className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
-                    placeholder="Last Name"
-                  />
-                  <LuUser2
-                    size={16}
-                    color="#4682BE"
-                    className="absolute right-3"
-                  />
-                </div>
-                <small className="text-[#E60A0A]">
-                  {errors.lastName?.message}
-                </small>
-              </div>
-              <div className="flex flex-col gap-2 ">
-                <label htmlFor="" className="text-[#36454F]">
-                  Email<span className="text-[#E60A0A]"> *</span>{" "}
-                </label>
-                <div className="flex relative items-center w-full">
-                  <input
-                    autoComplete="off"
-                    type="email"
-                    // required
-                    id=""
-                    {...register("email")}
-                    className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
-                    placeholder="Email"
-                  />
-                  <MdOutlineMail
-                    size={16}
-                    color="#694C7F"
-                    className="absolute right-3"
-                  />
-                </div>
-                <small className="text-[#E60A0A]  first-letter:uppercase">
-                  {errors.email?.message}
-                  {data && data?.signupUser?.message}
-                </small>
-              </div>
-              <div className="flex flex-col gap-2 ">
-                <label htmlFor="" className="text-[#36454F]">
-                  Password<span className="text-[#E60A0A]"> *</span>{" "}
-                </label>
-                <div className="flex relative items-center w-full">
-                  <input
-                    autoComplete="off"
-                    type={showPassword ? "text" : "password"}
-                    {...register("password")}
-                    id=""
-                    className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
-                    placeholder="Password"
-                  />
-                  {showPassword ? (
-                    <FaRegFaceFlushed
-                      onClick={handleTogglePassword}
-                      size={19}
-                      color="#4682BE"
-                      className="absolute right-3"
-                    />
-                  ) : (
-                    <FaRegFaceDizzy
-                      onClick={handleTogglePassword}
-                      size={19}
-                      color="#4682BE"
-                      className="absolute right-3"
-                    />
-                  )}
-                </div>
-                <small className="text-[#E60A0A]  first-letter:uppercase">
-                  {errors.password?.message}
-                </small>
-              </div>
-
-              <div className="flex flex-col gap-2 ">
-                <label htmlFor="" className="text-[#36454F] capitalize">
-                  confrim password<span className="text-[#E60A0A]"> *</span>{" "}
-                </label>
-                <div className="flex relative items-center w-full">
-                  <input
-                    autoComplete="off"
-                    type={showPassword ? "text" : "password"}
-                    {...register("cpassword")}
-                    className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
-                    placeholder="Password"
-                  />
-                  {showPassword ? (
-                    <FaRegFaceFlushed
-                      onClick={handleTogglePassword}
-                      size={19}
-                      color="#4682BE"
-                      className="absolute right-3"
-                    />
-                  ) : (
-                    <FaRegFaceDizzy
-                      onClick={handleTogglePassword}
-                      size={19}
-                      color="#4682BE"
-                      className="absolute right-3"
-                    />
-                  )}
-                </div>
-                <small className="text-[#E60A0A]  first-letter:uppercase">
-                  {errors.cpassword?.message}
-                </small>
-              </div>
-              <div>
-                <div className="flex items-center gap-1 ">
-                  <input
-                    type="checkbox"
-                    id="userAgreement"
-                    {...register("tac")}
-                    className="w-[16px] h-[16px]"
-                  />
-                  <label
-                    htmlFor="userAgreement"
-                    className="text-[#76848D] text-base select-none"
-                  >
-                    Terns & Condition
-                  </label>
-                </div>
-                <small className="text-[#E60A0A]  first-letter:uppercase">
-                  {errors.tac?.message}
-                </small>
-              </div>
-              <button
-                disabled={loading}
-                type="submit"
-                className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
-              >
-                {loading ? "loading..." : "submit"}
-              </button>
+    <>
+      <ToastContainer />
+      {showModal && (
+        <RegistrationModal
+          handleClose={handleCloseModal}
+          firstName={getValues("firstName")}
+          lastName={getValues("lastName") || ""}
+        />
+      )}
+      <section className=" py-3 sm:py-5 md:py-10">
+        <div className="flex justify-center  h-full px-3">
+          <div className="w-full xsm:w-[400px]">
+            <div className="py-3">
+              <h6 className="  text-[#1C4E80]  text-[26px] font-medium">
+                Registration
+              </h6>
             </div>
-            <small className="text-sm text-gray-600 mt-3 block">
-              Already have an account?
-              <Link
-                href="/auth/login"
-                className="text-blue-500 hover:underline ml-1"
-              >
-                Log in
-              </Link>
-            </small>
-          </form>
+            {/*  */}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2 ">
+                  <label htmlFor="" className="text-[#36454F]">
+                    First Name<span className="text-[#E60A0A]"> *</span>{" "}
+                  </label>
+                  <div className="flex relative items-center w-full">
+                    <input
+                      {...register("firstName")}
+                      autoComplete="off"
+                      type="text"
+                      className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
+                      placeholder="First Name"
+                    />
+
+                    <LuUser2
+                      size={16}
+                      color="#4682BE"
+                      className="absolute right-3"
+                    />
+                  </div>
+                  <small className="text-[#E60A0A]  first-letter:uppercase">
+                    {errors.firstName?.message}
+                  </small>
+                </div>
+
+                <div className="flex flex-col gap-2 ">
+                  <label htmlFor="" className="text-[#36454F]">
+                    Last Name<span className="text-[#E60A0A]"> *</span>{" "}
+                  </label>
+                  <div className="flex relative items-center w-full">
+                    <input
+                      {...register("lastName")}
+                      autoComplete="off"
+                      type="text"
+                      id=""
+                      className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
+                      placeholder="Last Name"
+                    />
+                    <LuUser2
+                      size={16}
+                      color="#4682BE"
+                      className="absolute right-3"
+                    />
+                  </div>
+                  <small className="text-[#E60A0A]">
+                    {errors.lastName?.message}
+                  </small>
+                </div>
+                <div className="flex flex-col gap-2 ">
+                  <label htmlFor="" className="text-[#36454F]">
+                    Email<span className="text-[#E60A0A]"> *</span>{" "}
+                  </label>
+                  <div className="flex relative items-center w-full">
+                    <input
+                      autoComplete="off"
+                      type="email"
+                      // required
+                      id=""
+                      {...register("email")}
+                      className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
+                      placeholder="Email"
+                    />
+                    <MdOutlineMail
+                      size={16}
+                      color="#694C7F"
+                      className="absolute right-3"
+                    />
+                  </div>
+                  <small className="text-[#E60A0A]  first-letter:uppercase">
+                    {errors.email?.message}
+                  </small>
+                </div>
+                <div className="flex flex-col gap-2 ">
+                  <label htmlFor="" className="text-[#36454F]">
+                    Password<span className="text-[#E60A0A]"> *</span>{" "}
+                  </label>
+                  <div className="flex relative items-center w-full">
+                    <input
+                      autoComplete="off"
+                      type={showPassword ? "text" : "password"}
+                      {...register("password")}
+                      id=""
+                      className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
+                      placeholder="Password"
+                    />
+                    {showPassword ? (
+                      <FaRegFaceFlushed
+                        onClick={handleTogglePassword}
+                        size={19}
+                        color="#4682BE"
+                        className="absolute right-3"
+                      />
+                    ) : (
+                      <FaRegFaceDizzy
+                        onClick={handleTogglePassword}
+                        size={19}
+                        color="#4682BE"
+                        className="absolute right-3"
+                      />
+                    )}
+                  </div>
+                  <small className="text-[#E60A0A]  first-letter:uppercase">
+                    {errors.password?.message}
+                  </small>
+                </div>
+
+                <div className="flex flex-col gap-2 ">
+                  <label htmlFor="" className="text-[#36454F] capitalize">
+                    confrim password<span className="text-[#E60A0A]"> *</span>{" "}
+                  </label>
+                  <div className="flex relative items-center w-full">
+                    <input
+                      autoComplete="off"
+                      type={showPassword ? "text" : "password"}
+                      {...register("cpassword")}
+                      className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] p-3 border-[#D0D3E8] border-solid outline-none"
+                      placeholder="Password"
+                    />
+                    {showPassword ? (
+                      <FaRegFaceFlushed
+                        onClick={handleTogglePassword}
+                        size={19}
+                        color="#4682BE"
+                        className="absolute right-3"
+                      />
+                    ) : (
+                      <FaRegFaceDizzy
+                        onClick={handleTogglePassword}
+                        size={19}
+                        color="#4682BE"
+                        className="absolute right-3"
+                      />
+                    )}
+                  </div>
+                  <small className="text-[#E60A0A]  first-letter:uppercase">
+                    {errors.cpassword?.message}
+                  </small>
+                </div>
+                <div>
+                  <div className="flex items-center gap-1 ">
+                    <input
+                      type="checkbox"
+                      id="userAgreement"
+                      {...register("tac")}
+                      className="w-[16px] h-[16px]"
+                    />
+                    <label
+                      htmlFor="userAgreement"
+                      className="text-[#76848D] text-base select-none"
+                    >
+                      Terns & Condition
+                    </label>
+                  </div>
+                  <small className="text-[#E60A0A]  first-letter:uppercase">
+                    {errors.tac?.message}
+                  </small>
+                </div>
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
+                >
+                  {loading ? "loading..." : "submit"}
+                </button>
+              </div>
+              <small className="text-sm text-gray-600 mt-3 block">
+                Already have an account?
+                <Link
+                  href="/auth/login"
+                  className="text-blue-500 hover:underline ml-1"
+                >
+                  Log in
+                </Link>
+              </small>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 export default signup;

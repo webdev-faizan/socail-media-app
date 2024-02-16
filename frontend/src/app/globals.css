@@ -4,3 +4,10 @@
 html,body{
     height: 100%;
 }
+
+.modal{
+    background-color: orange;
+    width: 500px;
+    height: 300px;
+    padding: 10px 20px;
+}
