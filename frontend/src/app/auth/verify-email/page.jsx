@@ -31,8 +31,7 @@ const EmailVerificationComponent = () => {
   return (
     <>
       <ToastContainer />
-
-      <div className="h-screen flex justify-center items-center w-full bg-red-500">
+      <section className="h-screen flex justify-center items-center w-full bg-red-500">
         <div className="email-verification min-m-[369px] max-w-md bg-white rounded-lg shadow-md p-8">
           <div className="email-icon flex justify-center">
             <FaEnvelope className="text-blue-500" size={48} />
@@ -50,7 +49,7 @@ const EmailVerificationComponent = () => {
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };

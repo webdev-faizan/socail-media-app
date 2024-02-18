@@ -121,19 +121,27 @@ export const loginUser = async (_, { signInForm }) => {
   const this_user = await userModel
     .findOne({ email: email })
     .select('_id email firstName lastName password emailVerified')
-  if (this_user && !this_user?.emailVerified) {
+  if (this_user) {
     const hashPassword = await this_user.correctPassword(
       password,
       this_user.password,
     )
     if (hashPassword) {
-      const token = await JwtTokenGenerator(this_user._id)
-      return {
-        message: 'Login successfully',
-        token,
-        extenstions: {
-          status: 200,
-        },
+      if (!this_user?.emailVerified) {
+        throw new GraphQLError('Plase verfied your email', {
+          extensions: {
+            code: 'FORBIDDEN',
+            http: {
+              status: 400,
+            },
+          },
+        })
+      } else {
+        const token = await JwtTokenGenerator(this_user._id)
+        return {
+          message: 'Login successfully',
+          token,
+        }
       }
     } else {
       throw new GraphQLError('Email or password is incorrect', {
@@ -145,15 +153,6 @@ export const loginUser = async (_, { signInForm }) => {
         },
       })
     }
-  } else if (this_user && !this_user?.emailVerified) {
-    throw new GraphQLError('Plase verfied your email', {
-      extensions: {
-        code: 'FORBIDDEN',
-        http: {
-          status: 400,
-        },
-      },
-    })
   } else {
     throw new GraphQLError('Account not exist ', {
       extensions: {
@@ -181,15 +180,15 @@ export const forgetPassword = async (_, userInfo) => {
       const token = await is_user_register.PasswordResetToken()
       await is_user_register.save()
 
+      const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
+      const html = ResetPasswordMail(link, is_user_register.firstName)
+      await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
       return {
         message: 'Token sent to email!',
         extenstions: {
           status: 200,
         },
       }
-      const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
-      const html = ResetPasswordMail(link, is_user_register.firstName)
-      await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
     }
   } catch (error) {
     return {

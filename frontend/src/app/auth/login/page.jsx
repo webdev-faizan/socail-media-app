@@ -1,6 +1,7 @@
 "use client";
 import { MdOutlineMail } from "react-icons/md";
 import { FaRegFaceFlushed } from "react-icons/fa6";
+import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,6 +9,8 @@ import * as yup from "yup";
 import { FaRegFaceDizzy } from "react-icons/fa6";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { LOGIN_USER } from "../../graphql/mutations/auth";
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
@@ -22,24 +25,43 @@ const schemaSignup = yup.object({
     ),
   password: yup.string().trim().required(fieldIsRequired),
 });
-
 const signup = () => {
-  const [mutationFunction, { data, loading }] = useMutation(LOGIN_USER);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
-    watch,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
+  const [mutationFunction, { loading }] = useMutation(LOGIN_USER, {
+    onError: ({ message }) => {
+      toast.error(message, {
+        autoClose: 1500,
+      });
+    },
+    onCompleted: ({ loginUser }) => {
+      setCookie("auth", loginUser.token, {
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000 + 100),
+        secure: true,
+        path: "/",
+      });
+      // if (Boolean(getValues("remember"))) {
+
+      // }
+      toast.success(loginUser.message, {
+        autoClose: 1000,
+      });
+      router.push("/");
+    },
+  });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const onSubmit = (data) => {
     const { email, password } = data;
@@ -48,10 +70,11 @@ const signup = () => {
         data: { email, password },
       },
     });
-    console.log(data);
   };
   return (
     <section>
+      <ToastContainer />
+
       <div className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">
@@ -84,7 +107,6 @@ const signup = () => {
                 </div>
                 <small className="text-[#E60A0A]  first-letter:uppercase">
                   {errors.email?.message}
-                  {data?.loginUser?.message}
                 </small>
               </div>
               <div className="flex flex-col gap-2 ">
@@ -118,7 +140,6 @@ const signup = () => {
                 </div>
                 <small className="text-[#E60A0A]  first-letter:uppercase">
                   {errors.password?.message}
-                  {data?.loginUser?.message}
                 </small>
               </div>
               <div>
@@ -128,7 +149,7 @@ const signup = () => {
                       <input
                         id="remember"
                         type="checkbox"
-                        defaultValue
+                        {...register("remember")}
                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                       />
                     </div>

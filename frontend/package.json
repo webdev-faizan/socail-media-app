@@ -11,6 +11,7 @@
   "dependencies": {
     "@apollo/client": "^3.8.10",
     "@hookform/resolvers": "^3.3.4",
+    "cookies-next": "^4.1.1",
     "dotenv": "^16.4.1",
     "framer-motion": "^11.0.5",
     "graphql": "^16.8.1",
