@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  lastPasswordChangeAt: {
+    type: Date,
+    default: Date.now(),
+  },
   passwordResetToken: {
     type: String,
   },
@@ -52,6 +56,9 @@ userSchema.pre('save', async function (next) {
   }
   next()
 })
+userSchema.methods.hashPassword = function (password) {
+  return bcryptjs.hashSync(password, 6)
+}
 userSchema.methods.correctPassword = function (
   candidatePassword,
   hashPassword,
@@ -61,7 +68,6 @@ userSchema.methods.correctPassword = function (
 
 userSchema.methods.PasswordResetToken = async function () {
   this.passwordResetExpires = (await Date.now()) + 10 * 60 * 1000
-
   const resetToken = await crypto.randomBytes(32).toString('hex')
   console.log(resetToken)
   this.passwordResetToken = await crypto

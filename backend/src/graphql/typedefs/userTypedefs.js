@@ -50,27 +50,11 @@ type Mutation{
 
 export const forgetPasswordTypedefs = `
 type ForgetPasswordResponse{
-
-  message:String
+message:String!
 }
 type Mutation{
   forgetPassword(email:String!):ForgetPasswordResponse
-}
-`
-// export const newPasswordTypeDefs = `
-// input formInput{
-// token:String
-// password:String
-
-// }
-// type NewPasswordResponse{
-//   message:String
-// }
-// type Mutation{
-//   newPassword(form:formInput!):NewPasswordResponse
-// }
-
-// `
+}`
 
 export const newPasswordTypeDefs = `
   input NewPasswordInput {
@@ -79,11 +63,10 @@ export const newPasswordTypeDefs = `
   }
 
   type NewPasswordResponse {
-    message: String
+    message: String!
   }
 
   type Mutation {
     newPassword(token: String, password: String): NewPasswordResponse
   }
-`;
-
+`

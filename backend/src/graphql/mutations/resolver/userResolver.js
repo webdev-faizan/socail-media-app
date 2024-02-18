@@ -54,8 +54,8 @@ const SignupUser = async (_, userInfo) => {
 export default SignupUser
 // email verification
 
-export const EmailVerification = async (_, params) => {
-  if (!Boolean(params?.token.length > 10) || params.token == undefined) {
+export const EmailVerification = async (_, { token }) => {
+  if (!Boolean(token.token.length > 10) || token.token == undefined || !token) {
     throw new GraphQLError('Token is invalid.', {
       extensions: {
         code: 'FORBIDDEN',
@@ -65,7 +65,7 @@ export const EmailVerification = async (_, params) => {
       },
     })
   } else {
-    const { userInfo, error, success } = JwtTokenDecode(params.token)
+    const { userInfo, error, success } = JwtTokenDecode(token.token)
     if (userInfo && success) {
       const id = userInfo?.id
       const date = Date.now()
@@ -165,77 +165,55 @@ export const loginUser = async (_, { signInForm }) => {
   }
 }
 
-export const forgetPassword = async (_, userInfo) => {
-  try {
-    const { email } = userInfo
-    const is_user_register = await userModel.findOne({ email })
-    if (!is_user_register || !is_user_register?.verified) {
-      return {
-        message: 'There is no user with email address.',
-        extenstions: {
-          status: 400,
+export const forgetPassword = async (_, { email }) => {
+  const is_user_register = await userModel.findOne({ email }).select('email')
+  if (!is_user_register && !is_user_register?.verified) {
+    throw new GraphQLError('Account not exist ', {
+      extensions: {
+        code: 'NOT_FOUND',
+        http: {
+          status: 404,
         },
-      }
-    } else {
-      const token = await is_user_register.PasswordResetToken()
-      await is_user_register.save()
-
-      const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
-      const html = ResetPasswordMail(link, is_user_register.firstName)
-      await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
-      return {
-        message: 'Token sent to email!',
-        extenstions: {
-          status: 200,
-        },
-      }
-    }
-  } catch (error) {
-    return {
-      message: 'Internal Server Error!',
-      extenstions: {
-        status: 500,
       },
+    })
+  } else {
+    const token = await is_user_register.PasswordResetToken()
+    await is_user_register.save()
+    const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
+    console.log(link)
+    const html = ResetPasswordMail(link, is_user_register.firstName)
+    // await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
+    return {
+      message: 'Token has been dispatched to your email!',
     }
   }
 }
 
 export const newPassword = async (_, userInfo) => {
-  try {
-    const { password, token } = await userInfo
-    const passwordResetToken = crypto
-      .createHash('sha256')
-      .update(token)
-      .digest('hex')
-    const this_user = await userModel.findOne({
-      passwordResetToken,
-      passwordResetExpires: { $gt: Date.now() },
-    })
-    if (this_user) {
-      this_user.password = password
-      this_user.passwordResetExpires = undefined
-      this_user.passwordResetToken = undefined
-      this_user.save()
-      return {
-        message: 'password successfull change',
-        extenstions: {
-          status: 200,
+  const { password, token } = await userInfo
+  const otpy = token.trim()
+  const passwordResetToken = crypto
+    .createHash('sha256')
+    .update(otpy)
+    .digest('hex')
+  const this_user = await userModel.findOne({
+    passwordResetToken,
+    passwordResetExpires: { $gt: Date.now() },
+  })
+  if (this_user) {
+    this_user.password = this_user.hashPassword(password)
+    this_user.passwordResetExpires = undefined
+    this_user.passwordResetToken = undefined
+    this_user.lastPasswordChangeAt = Date.now()
+    this_user.save()
+  } else {
+    throw new GraphQLError('invalid token or expiry ', {
+      extensions: {
+        code: 'NOT_FOUND',
+        http: {
+          status: 400,
         },
-      }
-    } else {
-      return {
-        message: 'invalid token or expiry',
-        extenstions: {
-          status: 200,
-        },
-      }
-    }
-  } catch (error) {
-    return {
-      message: 'internal server error',
-      extenstions: {
-        status: 500,
       },
-    }
+    })
   }
 }
