@@ -38,6 +38,14 @@ async function StartServer() {
   const Server = new ApolloServer({
     typeDefs,
     resolvers,
+    status400ForVariableCoercionErrors: true,
+    formatError: (err) => {
+      return {
+        message: err.message || 'Interal server error plase try again',
+        status: err.extensions.http.status || 500,
+        code: err.extensions.code || 'INTERNAL_SERVER_ERROR',
+      }
+    },
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
   })
   //! middleware
@@ -60,7 +68,6 @@ async function StartServer() {
 
   //* Middleware for enabling Cross-Origin Resource Sharing (CORS)
   app.use(cors(corsOptions))
-
   //* Middleware for logging HTTP requests
   // app.use(morgan("combined"));
 
@@ -68,6 +75,7 @@ async function StartServer() {
   app.use(cookieParser())
   await Server.start()
   Server.applyMiddleware({ app, path: '/graphql' })
+
   //* Middleware to sanitize user input for preventing Cross-Site Scripting (XSS) attacks
 
   app.get('/test', (req, res) => {

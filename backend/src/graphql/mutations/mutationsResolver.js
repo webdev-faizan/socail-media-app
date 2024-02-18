@@ -4,7 +4,7 @@ import {
   likeResolver,
 } from './resolver/postResolver.js'
 import userResolver, {
-  signupEmailVerification,
+  EmailVerification,
   loginUser,
   forgetPassword,
   newPassword,
@@ -13,7 +13,7 @@ import userResolver, {
 const mutationsResolver = {
   // !auth resolver
   signupUser: userResolver,
-  emailVerification: signupEmailVerification,
+  emailVerification: EmailVerification,
   loginUser: loginUser,
   forgetPassword: forgetPassword,
   newPassword: newPassword,

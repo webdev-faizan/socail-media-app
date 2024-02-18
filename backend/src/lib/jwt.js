@@ -2,9 +2,21 @@ import jwt from 'jsonwebtoken'
 
 export const JwtTokenGenerator = async (payload, expiresIn) => {
   return jwt.sign({ id: payload }, process.env.JWT_SECRET, {
-    expiresIn:"7d",
+    expiresIn: '7d',
   })
 }
 export const JwtTokenDecode = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET)
+  try {
+    const userInfo = jwt.verify(token, process.env.JWT_SECRET)
+    return {
+      userInfo,
+      error: false,
+      success: true,
+    }
+  } catch {
+    return {
+      error: true,
+      success: false,
+    }
+  }
 }
