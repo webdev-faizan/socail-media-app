@@ -66,6 +66,7 @@ const signup = () => {
   });
 
   const [mutateFunction, { loading, reset }] = useMutation(SIGNUP_USER, {
+    fetchPolicy: "no-cache",
     onError: ({ message }) => {
       toast.error(message);
     },

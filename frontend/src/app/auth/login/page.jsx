@@ -30,30 +30,34 @@ const signup = () => {
   const {
     register,
     handleSubmit,
-    getValues,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
   const [mutationFunction, { loading }] = useMutation(LOGIN_USER, {
+    fetchPolicy: "no-cache",
+
     onError: ({ message }) => {
       toast.error(message, {
         autoClose: 1500,
       });
     },
     onCompleted: ({ loginUser }) => {
+      toast.success(loginUser.message, {
+        autoClose: 1000,
+      });
       setCookie("auth", loginUser.token, {
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000 + 100),
         secure: true,
         path: "/",
       });
+      reset();
       // if (Boolean(getValues("remember"))) {
 
       // }
-      toast.success(loginUser.message, {
-        autoClose: 1000,
-      });
+
       router.push("/");
     },
   });
@@ -160,12 +164,12 @@ const signup = () => {
                       Remember me
                     </label>
                   </div>
-                  <a
-                    href="#"
+                  <Link
+                    href="/auth/forget-password"
                     className="ms-auto text-sm text-blue-700 hover:underline dark:text-blue-500"
                   >
                     Lost Password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <button

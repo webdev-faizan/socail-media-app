@@ -7,14 +7,6 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
-// export const VERIFY_EMAIL = gql`
-//   mutation ($token) {
-//     emailVerification($token) {
-//       message
-//     }
-//   }
-// `;
-
 export const VERIFY_EMAIL = gql`
   mutation VerifyEmail($token: String!) {
     emailVerification(token: $token) {
@@ -30,11 +22,18 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+export const FORTGET_PASSWORD = gql`
+  mutation ForgetPassword($email: String!) {
+    forgetPassword(email: $email) {
+      message
+    }
+  }
+`;
 
-// export const LOGIN_USER = gql`
-//   mutation ($data: formInput!) {
-//     loginUser(signInForm: $data) {
-//       message
-//     }
-//   }
-// `;
+export const NEW_PASSWORD = gql`
+  mutation ($token: String, $password: String) {
+    newPassword(token: $token, password: $password) {
+      message
+    }
+  }
+`;

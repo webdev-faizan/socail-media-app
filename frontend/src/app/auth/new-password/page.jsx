@@ -8,6 +8,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaRegFaceDizzy } from "react-icons/fa6";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useMutation } from "@apollo/client";
+import { NEW_PASSWORD } from "../../graphql/mutations/auth";
+import { ToastContainer, toast } from "react-toastify";
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
   password: yup
@@ -28,6 +32,7 @@ const schemaSignup = yup.object({
 
 const Newpassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -36,19 +41,40 @@ const Newpassword = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
+  const [mutateFunction] = useMutation(NEW_PASSWORD, {
+    fetchPolicy: "no-cache",
+    onCompleted: ({ newPassword }) => {
+      toast.success(newPassword.message, {
+        autoClose: 1500,
+      });
+      reset();
 
-  console.log(errors);
-  const onSubmit = (data) => {
-    console.log(data);
+      router.push("/auth/login");
+    },
+    onError: ({ message }) => {
+      toast.error(message, {
+        autoClose: 1500,
+      });
+    },
+  });
+  const onSubmit = ({ password }) => {
+    const token = searchParams.get("token");
+    mutateFunction({
+      variables: {
+        token,
+        password,
+      },
+    });
   };
   return (
     <section>
+      <ToastContainer />
       <div className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">

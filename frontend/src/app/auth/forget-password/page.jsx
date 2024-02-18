@@ -1,13 +1,14 @@
 "use client";
-import { LuUser2 } from "react-icons/lu";
 import { MdOutlineMail } from "react-icons/md";
-import { FaRegFaceFlushed } from "react-icons/fa6";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { FaRegFaceDizzy } from "react-icons/fa6";
-import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { ToastContainer, toast } from "react-toastify";
+
+import { FORTGET_PASSWORD } from "../../graphql/mutations/auth";
+import { useRouter } from "next/navigation";
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
   email: yup
@@ -22,28 +23,38 @@ const schemaSignup = yup.object({
 });
 
 const forgetPassword = () => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
+  const [MutationFunction, { loading }] = useMutation(FORTGET_PASSWORD, {
+    fetchPolicy: "no-cache",
+    onCompleted: ({ forgetPassword }) => {
+      toast.success(forgetPassword.message);
+      reset();
+      router.push("auth/login");
+    },
+    onError: ({ message }) => {
+      toast.error(message);
+    },
+  });
 
-  console.log(errors);
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = ({ email }) => {
+    MutationFunction({
+      variables: {
+        email: email,
+      },
+    });
   };
   return (
     <section>
+      <ToastContainer />
       <div className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">
@@ -80,6 +91,7 @@ const forgetPassword = () => {
               </div>
 
               <button
+                disabled={loading}
                 type="submit"
                 className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
               >

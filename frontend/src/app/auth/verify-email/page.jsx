@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 const EmailVerificationComponent = () => {
   const searchParams = useSearchParams();
-  const [mutateFunction, { loading, reset }] = useMutation(VERIFY_EMAIL, {
+  const [mutateFunction, { loading }] = useMutation(VERIFY_EMAIL, {
+    fetchPolicy: "no-cache",
     onCompleted: ({ emailVerification }) => {
       toast.success(emailVerification.message, {
         autoClose: 1500,
@@ -41,7 +42,7 @@ const EmailVerificationComponent = () => {
           </h2>
           <div className="flex justify-center">
             <button
-              // disabled={loading}
+              disabled={loading}
               className="verify-email-btn bg-blue-500 text-white font-semibold py-2 px-4 rounded mt-4 hover:bg-blue-600"
               onClick={VerifyEmail}
             >
