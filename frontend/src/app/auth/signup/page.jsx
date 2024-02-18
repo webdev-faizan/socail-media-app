@@ -40,7 +40,7 @@ const schemaSignup = yup.object({
     .required(fieldIsRequired)
     .min(8, "min length must be at least 8 characters")
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      /^(?:(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\da-zA-Z]).*)$/,
       "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character, and be at least 8 characters long"
     ),
 
@@ -69,7 +69,7 @@ const signup = () => {
     onError: ({ message }) => {
       toast.error(message);
     },
-    onCompleted: (data) => {
+    onCompleted: () => {
       setShowModal(true);
       reset();
     },
@@ -78,7 +78,7 @@ const signup = () => {
     setShowPassword(!showPassword);
   };
   const handleCloseModal = () => {
-    setShowModal(true);
+    setShowModal(false);
     router.push("/auth/login");
   };
 

@@ -7,7 +7,21 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
+// export const VERIFY_EMAIL = gql`
+//   mutation ($token) {
+//     emailVerification($token) {
+//       message
+//     }
+//   }
+// `;
 
+export const VERIFY_EMAIL = gql`
+  mutation VerifyEmail($token: String!) {
+    emailVerification(token: $token) {
+      message
+    }
+  }
+`;
 export const LOGIN_USER = gql`
   mutation ($data: signInFormInput!) {
     loginUser(signInForm: $data) {
@@ -16,6 +30,7 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
 // export const LOGIN_USER = gql`
 //   mutation ($data: formInput!) {
 //     loginUser(signInForm: $data) {
