@@ -1,27 +1,34 @@
-import {PostModel,commentModel} from '../../../model/postModel.js'
+import { PostModel, commentModel } from '../../../model/postModel.js'
+import { pipeline } from 'stream/promises'
+import { createWriteStream, existsSync, mkdirSync } from 'fs'
+import { v2 as cloudinary } from 'cloudinary'
+import { GraphQLError } from 'graphql'
+import { singleimageupload } from '../../../services/singleimageupload.js'
 
-export const createPostResolver = async (_, postInfo) => {
-  try {
-    const { userId, title, description, atttachment } = postInfo
+export const createPostResolver = async (_, { postInfo }) => {
+  const { title, description, atttachment } = postInfo
+  const { createReadStream } = await atttachment.file
+  const result = await singleimageupload(createReadStream)
+  if (!result) {
+    throw new GraphQLError('Interal server error plase try again', {
+      extensions: {
+        code: 'INTERNAL_SERVER_ERROR',
+        http: {
+          status: 500,
+        },
+      },
+    })
+  } else {
+    const { url } = result
     const this_post = await new PostModel({
-      userId,
+      // userId,
       title,
       description,
-      atttachment,
+      attachment: url,
     }).save()
     return {
-      message: 'Post created successfully',
-      postId: this_post.__id,
-      extenstions: {
-        status: 201,
-      },
-    }
-  } catch (error) {
-    return {
-      message: 'internal server error',
-      extenstions: {
-        status: 500,
-      },
+      atttachment: url,
+      message: 'Post Successfully Created',
     }
   }
 }

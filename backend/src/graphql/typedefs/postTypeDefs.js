@@ -1,19 +1,36 @@
 // !create post
+
+// import { gql } from 'apollo-server-express'
+
+// export const postTypeDefs = `
+// scalar Upload
+// type File {
+//     filename: String!
+//     mimetype: String!
+//     encoding: String!
+//     message:String
+//   }
+
+//   type Mutation {
+//     createPost(file: Upload!): File
+//   }
+// `
+
 export const postTypeDefs = `
+scalar Upload
 input PostInput {
-    userId: ID!
     title: String!
     description: String!
-    attachment: String
-  }
-  
-  type Mutation {
-    createPost(postInfo: PostInput): PostResponse
+    atttachment: Upload
   }
   type PostResponse {
     message: String
   }
-`
+  type Mutation {
+    createPost(postInfo: PostInput): PostResponse
+  }
+  `
+
 //! create comments
 export const commentTypeDef = `
 input CommentInput {

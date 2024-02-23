@@ -1,5 +1,9 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from '@apollo/server/plugin/landingPage/default'
 import mongoSanitize from 'express-mongo-sanitize'
 import compression from 'compression'
 import cors from 'cors'
@@ -15,12 +19,12 @@ import 'dotenv/config'
 import resolvers from './src/graphql/resolvers.js'
 import typeDefs from './src/graphql/typedefs.js'
 import mongoose, { mongo } from 'mongoose'
-
+import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
 process.on('uncaughtException', (error) => {
   console.log(error)
   process.exit(-1)
 })
-// ! db connection
+// ! db connectiong
 mongoose
   .connect(process.env.URI)
   .then(() => {
@@ -39,14 +43,22 @@ async function StartServer() {
     typeDefs,
     resolvers,
     status400ForVariableCoercionErrors: true,
+    csrfPrevention: false,
     formatError: (err) => {
+      console.log(err)
       return {
         message: err.message || 'Interal server error plase try again',
         status: err.extensions.http.status || 500,
         code: err.extensions.code || 'INTERNAL_SERVER_ERROR',
       }
     },
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
+    plugins: [
+      // Install a landing page plugin based on NODE_ENV
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageProductionDefault()
+        : ApolloServerPluginLandingPageLocalDefault(),
+    ],
+    // plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
   })
   //! middleware
   //* Middleware to parse JSON requests with a limit of 10MB
@@ -62,7 +74,7 @@ async function StartServer() {
   app.use(xss())
   //* Middleware to sanitize user input against MongoDB query injection
   app.use(mongoSanitize())
-
+  // app.use(graphqlUploadKoa({ maxFileSize: 10000000, maxFiles: 1 }))
   //* Middleware for compressing response bodies for faster transmission
   app.use(compression())
 
@@ -70,9 +82,9 @@ async function StartServer() {
   app.use(cors(corsOptions))
   //* Middleware for logging HTTP requests
   // app.use(morgan("combined"));
-
   //* Middleware for parsing cookies attached to the client's request
   app.use(cookieParser())
+  app.use(graphqlUploadExpress())
   await Server.start()
   Server.applyMiddleware({ app, path: '/graphql' })
 

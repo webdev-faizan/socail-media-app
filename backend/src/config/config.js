@@ -4,7 +4,8 @@ export const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
 })
 export const corsOptions = {
-  origin: 'http://localhost:3000', // Specify the allowed origin(s)
+  origin: '*', // Specify the allowed origin(s)
+  // origin: 'http://localhost:3000', // Specify the allowed origin(s)
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify the allowed HTTP methods
   credentials: true, // Enable credentials (cookies, HTTP authentication) cross-origin
   optionsSuccessStatus: 204, // Specify the HTTP status code for successful preflight requests
@@ -12,3 +13,4 @@ export const corsOptions = {
   exposedHeaders: 'Content-Range,X-Content-Range', // Specify the exposed headers
   maxAge: 600, // Specify the maximum age (in seconds) of the preflight request
 }
+

@@ -1,5 +1,8 @@
 import mutationsResolver from './mutations/mutationsResolver.js'
+// import GraphQLUpload from 'graphql-upload/'
+
 const resolvers = {
+  // Upload: GraphQLUpload,
   Mutation: {
     ...mutationsResolver,
   },
