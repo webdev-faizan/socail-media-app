@@ -7,7 +7,7 @@ cloudinary.config({
 })
 
 export const singleimageupload = async (createReadStream) => {
-  return await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       { folder: 'upload' },
       (error, result) => {

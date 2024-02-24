@@ -20,6 +20,9 @@ import resolvers from './src/graphql/resolvers.js'
 import typeDefs from './src/graphql/typedefs.js'
 import mongoose, { mongo } from 'mongoose'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
+import { JwtTokenDecode } from './src/lib/jwt.js'
+import { GraphQLError } from 'graphql'
+import userModel from './src/model/userModel.js'
 process.on('uncaughtException', (error) => {
   console.log(error)
   process.exit(-1)
@@ -44,6 +47,56 @@ async function StartServer() {
     resolvers,
     status400ForVariableCoercionErrors: true,
     csrfPrevention: false,
+    context: async ({ req }) => {
+      return req
+    },
+    // context: async ({ req }) => {
+    //   const operationName = req.body.query.split('{', 2)[1].split('(')[0].trim()
+    //   if (
+    //     operationName === 'signupUser' ||
+    //     operationName === 'emailVerification' ||
+    //     operationName === 'loginUser' ||
+    //     operationName === 'forgetPassword' ||
+    //     operationName === 'newPassword'
+    //   ) {
+    //     throw new GraphQLError('Session is Expired', {
+    //       code: 'BAD_REQUEST',
+    //       http: {
+    //         status: 400,
+    //       },
+    //     })
+    //   }
+    //   if (req.headers.authorization) {
+    //     const { error, success, tokenInfo } = await JwtTokenDecode()
+    //     if (success && tokenInfo) {
+    //       const token = req.headers.authorization.split(' ')[1]
+    //       const { id, iat } = tokenInfo
+    //       const existing_user = await userModel
+    //         .findById(id)
+    //         .select('_id lastPasswordChangeAt')
+    //       if (existing_user && existing_user.lastPasswordChangeAt > iat) {
+    //         req.user = existing_user.id
+    //         return { user: existing_user.id }
+    //       } else {
+    //         throw new GraphQLError('Session is Expired', {
+    //           code: 'BAD_REQUEST',
+    //           http: {
+    //             status: 400,
+    //           },
+    //         })
+    //       }
+    //     } else {
+    //       throw new GraphQLError('Session is Expired', {
+    //         code: 'BAD_REQUEST',
+    //         http: {
+    //           status: 400,
+    //         },
+    //       })
+    //     }
+    //   } else {
+    //     return {}
+    //   }
+    // },
     formatError: (err) => {
       console.log(err)
       return {
@@ -52,12 +105,6 @@ async function StartServer() {
         code: err.extensions.code || 'INTERNAL_SERVER_ERROR',
       }
     },
-    plugins: [
-      // Install a landing page plugin based on NODE_ENV
-      process.env.NODE_ENV === 'production'
-        ? ApolloServerPluginLandingPageProductionDefault()
-        : ApolloServerPluginLandingPageLocalDefault(),
-    ],
     // plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
   })
   //! middleware

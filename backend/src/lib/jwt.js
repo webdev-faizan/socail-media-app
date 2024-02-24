@@ -7,9 +7,9 @@ export const JwtTokenGenerator = async (payload, expiresIn) => {
 }
 export const JwtTokenDecode = (token) => {
   try {
-    const userInfo = jwt.verify(token, process.env.JWT_SECRET)
+    const tokenInfo = jwt.verify(token, process.env.JWT_SECRET)
     return {
-      userInfo,
+      tokenInfo,
       error: false,
       success: true,
     }

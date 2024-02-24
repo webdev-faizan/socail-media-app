@@ -65,9 +65,9 @@ export const EmailVerification = async (_, { token }) => {
       },
     })
   } else {
-    const { userInfo, error, success } = JwtTokenDecode(token.token)
-    if (userInfo && success) {
-      const id = userInfo?.id
+    const { tokenInfo, error, success } = JwtTokenDecode(token.token)
+    if (tokenInfo && success) {
+      const id = tokenInfo?.id
       const date = Date.now()
       const this_user = await userModel
         .findById(id)
