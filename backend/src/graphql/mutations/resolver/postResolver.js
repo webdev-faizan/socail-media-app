@@ -2,9 +2,10 @@ import { PostModel, commentModel } from '../../../model/postModel.js'
 import { GraphQLError } from 'graphql'
 import { singleimageupload } from '../../../services/singleimageupload.js'
 import ProtectRoutes from '../../../middleware/ProtectRoutes.js'
+import { connect } from 'mongoose'
 
 export const createPostResolver = async (_, { postInfo }, context) => {
-  const { id, error, success } = await ProtectRoutes(context)
+  const { id, error } = await ProtectRoutes(context)
   if (error) {
     throw new GraphQLError('Session has expired', {
       extensions: {
@@ -41,32 +42,31 @@ export const createPostResolver = async (_, { postInfo }, context) => {
     }
   }
 }
-export const CommentResolver = async (_, commentInfo) => {
-  try {
-    const { userId, text, postId } = commentInfo
-
-    const newComment = await new commentModel({
-      text,
-      user: userId,
-    }).save()
-    const post = await PostModel.findById(postId)
-    post.comments.push(newComment._id)
-    await post.save()
-    return {
-      message: 'Comment added successfully',
+export const CommentResolver = async (_, { createComment }, context) => {
+  const { id, error } = await ProtectRoutes(context)
+  console.log(createComment)
+  if (error) {
+    throw new GraphQLError('Session has expired', {
       extensions: {
-        status: 201,
-        commentId: newComment._id,
+        code: 'BAD_REQUEST',
+        http: {
+          status: 400,
+        },
       },
-    }
-  } catch (error) {
-    console.error('Error adding comment:', error)
-    return {
-      message: 'Internal server error',
-      extensions: {
-        status: 500,
-      },
-    }
+    })
+  }
+  const { comment, postId } = createComment
+  console.log(createComment)
+  await new commentModel({
+    user: id,
+    postId,
+    comment,
+  }).save()
+  await PostModel.findByIdAndUpdate(postId, {
+    $inc: { commentCount: 1 },
+  })
+  return {
+    message: 'Comment added successfully',
   }
 }
 export const likeResolver = async (_, likeInfo) => {

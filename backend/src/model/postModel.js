@@ -28,17 +28,10 @@ const postSchema = new mongoose.Schema(
       default: 0,
     },
 
-    likeComments: {
+    commentCount: {
       type: Number,
       default: 0,
     },
-
-    comments: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Comment',
-      },
-    ],
   },
   { timestamps: true },
 )
@@ -50,7 +43,12 @@ const commentsSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
-  text: {
+  postId: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Post',
+    required: true,
+  },
+  comment: {
     type: String,
     required: true,
   },

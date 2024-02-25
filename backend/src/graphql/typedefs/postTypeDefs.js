@@ -17,13 +17,12 @@ input PostInput {
 //! create comments
 export const commentTypeDef = `
 input CommentInput {
-    userId: ID!
-    text: String!
-    postId: ID!
+  postId: ID!
+  comment: String!
   }
   
   type Mutation {
-    createComment(commentInfo: CommentInput): CommentResponse
+    createComment(createComment: CommentInput): CommentResponse
   }
    type CommentResponse {
     message: String
@@ -52,14 +51,13 @@ type Query {
   }
   
   type PostInfo {
-    firstName:String
-    lastName:String
-    email:String
+    id:ID
     title: String
     description: String
     attachment: String
     createdAt: String
     likeCount: Int
+    commentCount: Int
     postOwner:OwnerInfo
   }
   type OwnerInfo{
@@ -77,25 +75,25 @@ type Query {
 //! get comments
 
 export const getComments = `
+type UserInfo {
+  id: ID
+  firstName: String
+  lastName: String
+}
+
+type CommentInfo {
+  user: UserInfo
+  comment: String
+  createdAt: String
+}
+
+type GetCommentResponse {
+  message: String
+  data: [CommentInfo]
+}
+
 type Query {
-    getComments: GetCommentResponse
-  }
-  
-  type UserInfo {
-    firstName: String
-    lastName: String
-    profile: String
-  }
-  
-  type CommentInfo {
-    title: String
-    users: [UserInfo]
-    text: String
-    createdAt: String
-  }
-  
-  type GetCommentResponse {
-    message: String
-    data: [CommentInfo]
-  }
+  getComments(postId: ID!): GetCommentResponse
+}
+
 `
