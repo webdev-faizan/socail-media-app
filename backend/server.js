@@ -1,9 +1,5 @@
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import {
-  ApolloServerPluginLandingPageLocalDefault,
-  ApolloServerPluginLandingPageProductionDefault,
-} from '@apollo/server/plugin/landingPage/default'
 import mongoSanitize from 'express-mongo-sanitize'
 import compression from 'compression'
 import cors from 'cors'
@@ -20,9 +16,6 @@ import resolvers from './src/graphql/resolvers.js'
 import typeDefs from './src/graphql/typedefs.js'
 import mongoose, { mongo } from 'mongoose'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
-import { JwtTokenDecode } from './src/lib/jwt.js'
-import { GraphQLError } from 'graphql'
-import userModel from './src/model/userModel.js'
 process.on('uncaughtException', (error) => {
   console.log(error)
   process.exit(-1)
@@ -105,7 +98,7 @@ async function StartServer() {
         code: err.extensions.code || 'INTERNAL_SERVER_ERROR',
       }
     },
-    // plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
   })
   //! middleware
   //* Middleware to parse JSON requests with a limit of 10MB

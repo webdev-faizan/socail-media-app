@@ -1,21 +1,4 @@
 // !create post
-
-// import { gql } from 'apollo-server-express'
-
-// export const postTypeDefs = `
-// scalar Upload
-// type File {
-//     filename: String!
-//     mimetype: String!
-//     encoding: String!
-//     message:String
-//   }
-
-//   type Mutation {
-//     createPost(file: Upload!): File
-//   }
-// `
-
 export const postTypeDefs = `
 scalar Upload
 input PostInput {
@@ -62,44 +45,35 @@ input LikeInput {
   }
   
 `
-// ! get  user post
-export const getUserPostTypeDefs = `
-type Query {
-    getUserPost(token: String): GetUserPostResponse
-  }
-  
-  type PostInfo {
-    title: String
-    description: String
-    attachment: String
-    createdAt: String
-    likeCount: Int
-  }
-  
-  type GetUserPostResponse {
-    message: String
-    data: [PostInfo]
-  }
-`
-//! get alluser
+//!get All post
 export const getAllPostTypeDefs = `
 type Query {
-    getUserPost(): GetUserPostResponse
+  getAllPost(page: Int, limit: Int): GetUserPostResponse
   }
   
   type PostInfo {
+    firstName:String
+    lastName:String
+    email:String
     title: String
     description: String
     attachment: String
     createdAt: String
     likeCount: Int
+    postOwner:OwnerInfo
   }
-  
+  type OwnerInfo{
+    firstName:String
+    lastName:String
+    id:ID
+    email:String
+}
   type GetUserPostResponse {
     message: String
     data: [PostInfo]
   }
 `
+
 //! get comments
 
 export const getComments = `

@@ -7,6 +7,7 @@ const typeDefs = gql`
   type Query {
     greet: String
   }
+
   ${mutationTypeDefs}
   #mutations
   ${queryTypeDefs}

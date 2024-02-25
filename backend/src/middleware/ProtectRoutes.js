@@ -7,7 +7,7 @@ const ProtectRoutes = async (req) => {
     const { error, success, tokenInfo } = await JwtTokenDecode(token)
     if (success && tokenInfo) {
       const { id, iat } = tokenInfo
-      const existing_user = await userModel.select('_id lastPasswordChangeAt')
+      const existing_user = await userModel.findById(id).select('_id lastPasswordChangeAt')
       if (existing_user && existing_user.lastPasswordChangeAt > iat) {
         return { id: existing_user.id, error: false, success: true }
       } else {

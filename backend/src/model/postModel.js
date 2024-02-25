@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 const postSchema = new mongoose.Schema(
   {
-    user: {
+    postOwner: {
       type: mongoose.Schema.ObjectId,
       ref: 'user',
-      // required: true,
+      required: true,
     },
     title: {
       type: String,
@@ -24,6 +24,11 @@ const postSchema = new mongoose.Schema(
       },
     ],
     likeCount: {
+      type: Number,
+      default: 0,
+    },
+
+    likeComments: {
       type: Number,
       default: 0,
     },
