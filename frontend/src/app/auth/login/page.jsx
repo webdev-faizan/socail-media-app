@@ -78,7 +78,6 @@ const signup = () => {
   return (
     <section>
       <ToastContainer />
-
       <div className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">
