@@ -1,21 +1,20 @@
 "use client";
 import { FaRegComment } from "react-icons/fa6";
-import { FaShare, FaWindowClose } from "react-icons/fa";
-import { AiOutlineLike } from "react-icons/ai";
+import { FaShare } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { getCookie } from "cookies-next";
 import ResponsiveLayoutWithSidebar from "./layout/ResponsiveLayoutWithSidebar";
 import Comments from "./Components/Comments";
 import LikeButtton from "./Components/LikeButtton";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POST } from "./graphql/query/post";
-import Link from "next/link";
-import { getCookie } from "cookies-next";
-const user_id = getCookie("user_id");
 
+const user_id = getCookie("user_id");
 export default function Home() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [postId, setPostId] = useState("");
-  const [CommentCount, setCommentCount] = useState(0);
+  const [page, setPage] = useState(1);
   function openModal() {
     setIsOpen(true);
   }
@@ -26,7 +25,7 @@ export default function Home() {
   const { loading, error, data, fetchMore } = useQuery(GET_ALL_POST, {
     variables: {
       page: 1,
-      limit: 2,
+      limit: 1,
     },
     fetchPolicy: "cache-and-network",
   });
@@ -35,15 +34,16 @@ export default function Home() {
       window.pageYOffset + window.innerHeight >=
       document.documentElement.scrollHeight
     ) {
+      setPage(page + 1);
       fetchMore({
         variables: {
           limit: 2,
-          page: 1,
+          page: page,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
           return {
-            feed: [...prev.feed, ...fetchMoreResult.feed],
+            ...prev,
+            ...fetchMoreResult,
           };
         },
       });
@@ -69,7 +69,6 @@ export default function Home() {
   return (
     <>
       <Comments
-        setCommentCount={setCommentCount}
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
         postId={postId}
@@ -145,11 +144,10 @@ export default function Home() {
                             setPostId(id);
                           }}
                         />
-                        {CommentCount}
+                        {commentCount}{" "}
                       </div>
                       <div className="flex gap-1">
-                        {/* <FaShare size={20} /> */}
-                        {/* 1k */}
+                        <FaShare size={20} />
                       </div>
                     </div>
                   </div>
