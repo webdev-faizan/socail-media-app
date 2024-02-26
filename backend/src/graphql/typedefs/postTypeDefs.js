@@ -30,13 +30,8 @@ input CommentInput {
 `
 //! add like
 export const likeTypeDefs = `
-input LikeInput {
-    userId: ID!
-    postId: ID!
-  }
-  
-  type Mutation {
-    like(likeInfo: LikeInput): LikeResponse
+type Mutation {
+    like(postId: ID!): LikeResponse
   }
   
   type LikeResponse {
@@ -59,7 +54,9 @@ type Query {
     likeCount: Int
     commentCount: Int
     postOwner:OwnerInfo
+    likes: [ID] 
   }
+ 
   type OwnerInfo{
     firstName:String
     lastName:String

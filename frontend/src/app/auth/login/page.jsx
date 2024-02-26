@@ -46,18 +46,20 @@ const signup = () => {
     },
     onCompleted: ({ loginUser }) => {
       toast.success(loginUser.message, {
-        autoClose: 1000,
+        autoClose: 500,
       });
+      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000 + 100);
       setCookie("auth", loginUser.token, {
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000 + 100),
+        expires,
+        secure: true,
+        path: "/",
+      });
+      setCookie("user_id", loginUser.id, {
+        expires: expires,
         secure: true,
         path: "/",
       });
       reset();
-      // if (Boolean(getValues("remember"))) {
-
-      // }
-
       router.push("/");
     },
   });

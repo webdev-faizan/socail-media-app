@@ -5,12 +5,17 @@ import { AiOutlineLike } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import ResponsiveLayoutWithSidebar from "./layout/ResponsiveLayoutWithSidebar";
 import Comments from "./Components/Comments";
+import LikeButtton from "./Components/LikeButtton";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POST } from "./graphql/query/post";
 import Link from "next/link";
+import { getCookie } from "cookies-next";
+const user_id = getCookie("user_id");
+
 export default function Home() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [postId, setPostId] = useState("");
+  const [CommentCount, setCommentCount] = useState(0);
   function openModal() {
     setIsOpen(true);
   }
@@ -21,7 +26,7 @@ export default function Home() {
   const { loading, error, data, fetchMore } = useQuery(GET_ALL_POST, {
     variables: {
       page: 1,
-      limit: 1,
+      limit: 2,
     },
     fetchPolicy: "cache-and-network",
   });
@@ -32,8 +37,8 @@ export default function Home() {
     ) {
       fetchMore({
         variables: {
-          limit: 1,
-          page: 2,
+          limit: 2,
+          page: 1,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
@@ -64,6 +69,7 @@ export default function Home() {
   return (
     <>
       <Comments
+        setCommentCount={setCommentCount}
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
         postId={postId}
@@ -81,9 +87,15 @@ export default function Home() {
                 commentCount,
                 likeCount,
                 postOwner,
+                likes,
               } = data;
-
               const { email, firstName, lastName, id: userid } = postOwner;
+              const isLikeUser = Boolean(
+                likes &&
+                  likes.find(
+                    (alluserid) => alluserid.toString() == user_id.toString()
+                  )
+              );
 
               return (
                 <div className="max-w-sm relative bg-[#617f9c] border border-gray-200 rounded-lg shadow ">
@@ -119,8 +131,11 @@ export default function Home() {
                     </p>
                     <div className="flex  justify-between cursor-pointer">
                       <div className="flex gap-1">
-                        <AiOutlineLike size={20} />
-                        {likeCount}
+                        <LikeButtton
+                          postId={id}
+                          isLikeUser={isLikeUser}
+                          likeCount={likeCount}
+                        />
                       </div>
                       <div className="flex gap-1">
                         <FaRegComment
@@ -130,7 +145,7 @@ export default function Home() {
                             setPostId(id);
                           }}
                         />
-                        {commentCount}
+                        {CommentCount}
                       </div>
                       <div className="flex gap-1">
                         {/* <FaShare size={20} /> */}

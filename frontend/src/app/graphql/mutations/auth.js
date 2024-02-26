@@ -19,6 +19,7 @@ export const LOGIN_USER = gql`
     loginUser(signInForm: $data) {
       message
       token
+      id
     }
   }
 `;

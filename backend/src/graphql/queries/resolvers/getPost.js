@@ -24,11 +24,12 @@ export const getAllPostsResolver = async (
   const validPage = pageNo > 1 ? pageNo : 1
   const skip = (validPage - 1) * pageSize
   const allPosts = await PostModel.find({})
-    .select('-comments -likes')
+    .select('-comments')
     .populate('postOwner', 'firstName lastName email _id')
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
+    console.log(allPosts)
   return {
     message: 'Posts fetched successfully',
     data: allPosts,

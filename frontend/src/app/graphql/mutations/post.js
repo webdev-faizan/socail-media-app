@@ -13,3 +13,11 @@ export const CREATE_COMMENT = gql`
     }
   }
 `;
+
+export const ADD_LIKE = gql`
+  mutation Like($postId: ID!) {
+    like(postId: $postId) {
+      message
+    }
+  }
+`;

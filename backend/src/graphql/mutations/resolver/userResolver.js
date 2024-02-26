@@ -139,8 +139,10 @@ export const loginUser = async (_, { signInForm }) => {
       } else {
         const token = await JwtTokenGenerator(this_user._id)
         return {
+          ...this_user.toObject(),
           message: 'Login successfully',
           token,
+          id: this_user._id,
         }
       }
     } else {

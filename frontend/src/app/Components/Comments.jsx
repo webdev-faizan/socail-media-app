@@ -4,12 +4,12 @@ import { IoMdSend } from "react-icons/io";
 import { FaWindowClose } from "react-icons/fa";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_COMMENT } from "../graphql/mutations/post";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import { GET_COMMENTS } from "../graphql/query/post";
 import { formatDistanceToNow } from "date-fns";
 
-const Comments = ({ modalIsOpen, closeModal, postId }) => {
+const Comments = ({ modalIsOpen, closeModal, postId, setCommentCount }) => {
   const [comment, setComments] = useState("");
   const { data, refetch } = useQuery(GET_COMMENTS, {
     variables: {
@@ -22,9 +22,6 @@ const Comments = ({ modalIsOpen, closeModal, postId }) => {
       refetch({ postId });
     }
   }, [postId]);
-
-  console.log(data);
-
   const [mutationFunction, { loading, reset }] = useMutation(CREATE_COMMENT, {
     fetchPolicy: "no-cache",
     onError: ({ message }) => {
@@ -32,13 +29,10 @@ const Comments = ({ modalIsOpen, closeModal, postId }) => {
         autoClose: 1500,
       });
     },
-    onCompleted: ({ createComment }) => {
+    onCompleted: () => {
+      setCommentCount((prev) => prev + 1);
       refetch();
       setComments("");
-      toast.success(createComment.message, {
-        progress: false,
-        autoClose: 500,
-      });
       reset();
     },
   });
@@ -57,7 +51,6 @@ const Comments = ({ modalIsOpen, closeModal, postId }) => {
 
   return (
     <div>
-      {/* <ToastContainer /> */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

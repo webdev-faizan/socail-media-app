@@ -11,6 +11,7 @@ export const GET_ALL_POST = gql`
         createdAt
         likeCount
         commentCount
+        likes
         postOwner {
           firstName
           lastName
