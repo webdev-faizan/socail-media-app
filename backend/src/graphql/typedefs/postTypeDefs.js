@@ -41,6 +41,8 @@ type Mutation {
 `
 //!get All post
 export const getAllPostTypeDefs = `
+scalar Date
+
 type Query {
   getAllPost(page: Int, limit: Int): GetUserPostResponse
   }
@@ -50,7 +52,7 @@ type Query {
     title: String
     description: String
     attachment: String
-    createdAt: String
+    createdAt: Date
     likeCount: Int
     commentCount: Int
     postOwner:OwnerInfo

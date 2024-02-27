@@ -9,7 +9,7 @@ import Comments from "./Components/Comments";
 import LikeButtton from "./Components/LikeButtton";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POST } from "./graphql/query/post";
-
+import { format } from "date-fns";
 const user_id = getCookie("user_id");
 export default function Home() {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -27,7 +27,8 @@ export default function Home() {
       page: 1,
       limit: 1,
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
+    // fetchPolicy: "cache-and-network",
   });
   const handleScroll = () => {
     if (
@@ -79,6 +80,7 @@ export default function Home() {
           <div className="flex  flex-wrap justify-between gap-6">
             {data?.getAllPost.data.map((data) => {
               const {
+                createdAt,
                 id,
                 title,
                 description,
@@ -88,7 +90,9 @@ export default function Home() {
                 postOwner,
                 likes,
               } = data;
-              const { email, firstName, lastName, id: userid } = postOwner;
+              const date = new Date(createdAt);
+              const postCreatedAt = format(date, "d MMM yyyy");
+              const { firstName, lastName, id: userid } = postOwner;
               const isLikeUser = Boolean(
                 likes &&
                   likes.find(
@@ -105,7 +109,7 @@ export default function Home() {
                     <div className="flex items-center p-2 ">
                       <div className="flex-shrink-0">
                         <img
-                          className="w-8 h-8 rounded-full object-center"
+                          className="w-9 h-9 rounded-full object-center"
                           src="/image-1.jpg"
                           alt="Neil image"
                         />
@@ -114,8 +118,8 @@ export default function Home() {
                         <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
                           {firstName + " " + lastName}
                         </p>
-                        <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                          {email}
+                        <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-[2px]">
+                          {postCreatedAt}
                         </p>
                       </div>
                     </div>
