@@ -2,24 +2,26 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { IoMdSend } from "react-icons/io";
 import { FaWindowClose } from "react-icons/fa";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CREATE_COMMENT } from "../graphql/mutations/post";
 import { toast } from "react-toastify";
 import ClipLoader from "react-spinners/ClipLoader";
 import { GET_COMMENTS } from "../graphql/query/post";
 import { formatDistanceToNow } from "date-fns";
+import { useLazyQuery } from "@apollo/client";
 
-const Comments = ({ modalIsOpen, closeModal, postId, setCommentCount }) => {
+const Comments = ({ modalIsOpen, closeModal, postId }) => {
   const [comment, setComments] = useState("");
-  const { data, refetch } = useQuery(GET_COMMENTS, {
+  const [getcomments, { data }] = useLazyQuery(GET_COMMENTS, {
     variables: {
       postId,
     },
     fetchPolicy: "no-cache",
   });
+
   useEffect(() => {
     if (postId) {
-      refetch({ postId });
+      getcomments();
     }
   }, [postId]);
   const [mutationFunction, { loading, reset }] = useMutation(CREATE_COMMENT, {
@@ -30,8 +32,7 @@ const Comments = ({ modalIsOpen, closeModal, postId, setCommentCount }) => {
       });
     },
     onCompleted: () => {
-      setCommentCount((prev) => prev + 1);
-      refetch();
+      getcomments();
       setComments("");
       reset();
     },

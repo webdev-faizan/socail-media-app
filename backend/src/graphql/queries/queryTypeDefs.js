@@ -1,7 +1,8 @@
-import { getAllPostTypeDefs ,getComments} from '../typedefs/postTypeDefs.js'
+import { getAllPostTypeDefs ,getComments,getUserPostTypeDefs} from '../typedefs/postTypeDefs.js'
 
 const queryTypeDefs = `
 ${getAllPostTypeDefs}
+${getUserPostTypeDefs}
 ${getComments}
 `
 

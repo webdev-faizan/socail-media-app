@@ -1,4 +1,9 @@
-import { postTypeDefs ,commentTypeDef,likeTypeDefs} from '../typedefs/postTypeDefs.js'
+import {
+  postTypeDefs,
+  commentTypeDef,
+  likeTypeDefs,
+} from '../typedefs/postTypeDefs.js'
+import { ProfileTypeDefs } from '../typedefs/profileTypedefs.js'
 import {
   signUpUserTypeDefs,
   emailVerificationTypedefs,
@@ -16,6 +21,7 @@ ${newPasswordTypeDefs}
 ${postTypeDefs}
 ${commentTypeDef}
 ${likeTypeDefs}
+${ProfileTypeDefs}
 
 `
 

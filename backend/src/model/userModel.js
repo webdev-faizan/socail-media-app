@@ -48,6 +48,10 @@ const userSchema = new mongoose.Schema({
     default: 'system',
     enum: ['system', 'google', 'facebook'],
   },
+  profile: {
+    type: String,
+    default: '',
+  },
 })
 
 userSchema.pre('save', async function (next) {

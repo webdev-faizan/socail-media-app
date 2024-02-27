@@ -1,11 +1,34 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "react-avatar";
 import { FaCamera } from "react-icons/fa";
 import ResponsiveLayoutWithSidebar from "../layout/ResponsiveLayoutWithSidebar";
-import Card from "../Components/Card";
+import Cards from "../Components/Cards";
+import { GET_USER_POST } from "../graphql/query/post";
+import { useMutation } from "@apollo/client";
 
 const page = () => {
+  // const [mutateFunction] = useMutation(NEW_PASSWORD, {
+  //   fetchPolicy: "no-cache",
+  //   onCompleted: ({ newPassword }) => {
+  //     toast.success(newPassword.message, {
+  //       autoClose: 1500,
+  //     });
+  //     reset();
+  //   },
+  //   onError: ({ message }) => {
+  //     toast.error(message, {
+  //       autoClose: 1500,
+  //     });
+  //   },
+  // });
+  const onChangeHandler = (e) => {
+    mutateFunction({
+      variables: {
+        profile: e.traget.files[0],
+      },
+    });
+  };
   return (
     <>
       <ResponsiveLayoutWithSidebar />
@@ -16,15 +39,16 @@ const page = () => {
             <div className="relative">
               <input
                 type="file"
+                multiple={false}
+                onChange={onChangeHandler}
+                accept="Image/*"
                 className="w-[25px] h-[22px] absolute z-10 opacity-0"
               />
               <FaCamera size={22} className="absolute" />
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap md:flex-none justify-center">
-          <Card />
-        </div>
+        <Cards query={GET_USER_POST} />
       </div>
     </>
   );

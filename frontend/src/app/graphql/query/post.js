@@ -22,6 +22,28 @@ export const GET_ALL_POST = gql`
     }
   }
 `;
+export const GET_USER_POST = gql`
+  query GetUserPost($pageNo: Int, $limit: Int) {
+    getUserPost(page: $pageNo, limit: $limit) {
+      data {
+        id
+        title
+        description
+        attachment
+        createdAt
+        likeCount
+        commentCount
+        likes
+        postOwner {
+          firstName
+          lastName
+          id
+          email
+        }
+      }
+    }
+  }
+`;
 
 export const GET_COMMENTS = gql`
   query ($postId: ID!) {

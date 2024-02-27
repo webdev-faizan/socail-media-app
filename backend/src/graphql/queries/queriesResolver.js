@@ -1,7 +1,8 @@
-import { getAllPostsResolver, getComments } from './resolvers/getPost.js'
+import { getAllPostsResolver, getComments ,getUserPostsResolver} from './resolvers/getPost.js'
 
 const queriesResolver = {
   getAllPost: getAllPostsResolver,
+  getUserPost: getUserPostsResolver,
   getComments: getComments,
 }
 export default queriesResolver

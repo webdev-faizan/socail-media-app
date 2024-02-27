@@ -71,6 +71,37 @@ type Query {
   }
 `
 
+//!get All post
+export const getUserPostTypeDefs = `
+scalar Date
+
+type Query {
+  getUserPost(page: Int, limit: Int): GetUserPostResponse
+  }
+  
+  type PostInfo {
+    id:ID
+    title: String
+    description: String
+    attachment: String
+    createdAt: Date
+    likeCount: Int
+    commentCount: Int
+    postOwner:OwnerInfo
+    likes: [ID] 
+  }
+ 
+  type OwnerInfo{
+    firstName:String
+    lastName:String
+    id:ID
+    email:String
+}
+  type GetUserPostResponse {
+    message: String
+    data: [PostInfo]
+  }
+`
 //! get comments
 
 export const getComments = `
