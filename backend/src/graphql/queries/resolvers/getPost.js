@@ -29,7 +29,6 @@ export const getAllPostsResolver = async (
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
-  console.log(allPosts)
   return {
     message: 'Posts fetched successfully',
     data: allPosts,
@@ -56,20 +55,21 @@ export const getUserPostsResolver = async (
   const pageNo = parseInt(page) || 1
   const validPage = pageNo > 1 ? pageNo : 1
   const skip = (validPage - 1) * pageSize
-  const allPosts = await PostModel.find({ postOwner: "65bce0a774ce14714e0f4186" })
+  const allPosts = await PostModel.find({
+    postOwner: '65bce0a774ce14714e0f4186',
+  })
     .select('-comments')
     .populate('postOwner', 'firstName lastName email _id')
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
-  console.log(allPosts)
   return {
     message: 'Posts fetched successfully',
     data: allPosts,
   }
 }
 
-export const getComments = async (_, { postId }, context) => {
+export const getCommentsResolver = async (_, { postId }, context) => {
   const { error } = await ProtectRoutes(context)
   if (error) {
     throw new GraphQLError('Session has expired', {

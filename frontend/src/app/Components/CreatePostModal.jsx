@@ -78,12 +78,11 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
   const useref = useRef();
   const onSubmit = async (data) => {
     const { atttachment, title, description } = data;
-    // console.log(atttachment[0].name);
-    // file: useref.current.files[0],
+
     MutationFunction({
       variables: {
         data: {
-          atttachment:useref.current.files[0],
+          atttachment: useref.current.files[0],
           title,
           description,
         },

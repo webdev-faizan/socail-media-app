@@ -1,3 +1,4 @@
+import { ProfileImageResolver } from './resolver/ProfileResolver.js'
 import {
   createPostResolver,
   CommentResolver,
@@ -21,5 +22,6 @@ const mutationsResolver = {
   createPost: createPostResolver,
   createComment: CommentResolver,
   like: likeResolver,
+  profileChange: ProfileImageResolver,
 }
 export default mutationsResolver

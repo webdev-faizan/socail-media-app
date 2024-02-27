@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Comments from "./Comments";
 import { format } from "date-fns";
+import { useQuery } from "@apollo/client";
 import { FaRegComment } from "react-icons/fa6";
 import { FaShare } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
 const user_id = getCookie("user_id");
 import LikeButtton from "./LikeButtton";
-import { useQuery } from "@apollo/client";
+import Comments from "./Comments";
 const Cards = ({ query }) => {
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -88,12 +88,14 @@ const Cards = ({ query }) => {
               const date = new Date(createdAt);
               const postCreatedAt = format(date, "d MMM yyyy");
               const { firstName, lastName, id: userid } = postOwner;
-              const isLikeUser = Boolean(
-                likes &&
-                  likes.find(
-                    (alluserid) => alluserid.toString() == user_id.toString()
-                  )
-              );
+              const isLikeUser =
+                user_id &&
+                Boolean(
+                  likes &&
+                    likes.find(
+                      (alluserid) => alluserid.toString() == user_id.toString()
+                    )
+                );
 
               return (
                 <div className="max-w-sm relative bg-[#617f9c] border border-gray-200 rounded-lg shadow ">

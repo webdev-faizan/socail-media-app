@@ -1,6 +1,8 @@
-import userModel from '../../../model/userModel'
+import ProtectRoutes from '../../../middleware/ProtectRoutes.js'
+import userModel from '../../../model/userModel.js'
+import { singleimageupload } from '../../../services/singleimageupload.js'
 
-export const ProfileImageResolver = async (_, { profile }, context) => {
+export const ProfileImageResolver = async (_, { profileImg }, context) => {
   const { id, error } = await ProtectRoutes(context)
   if (error) {
     throw new GraphQLError('Session has expired', {
@@ -12,7 +14,7 @@ export const ProfileImageResolver = async (_, { profile }, context) => {
       },
     })
   }
-  const { createReadStream } = await profile.file
+  const { createReadStream } = await profileImg.file
   const result = await singleimageupload(createReadStream)
   if (!result) {
     throw new GraphQLError('Interal server error plase try again', {
@@ -30,7 +32,29 @@ export const ProfileImageResolver = async (_, { profile }, context) => {
     })
     return {
       profile: url,
-      message: 'profile upload successfully',
+      message: 'Successfully updated profile',
     }
+  }
+}
+
+export const getUserPersonalInfoResolver = async (_, $, context) => {
+  const { id, error } = await ProtectRoutes(context)
+  if (error) {
+    throw new GraphQLError('Session has expired', {
+      extensions: {
+        code: 'BAD_REQUEST',
+        http: {
+          status: 400,
+        },
+      },
+    })
+  }
+  const user = await userModel
+    .findById(id)
+    .select('firstName lastName email emailVerified profile')
+    console.log(user)
+  return {
+    message: 'Successfully found user information',
+    ...user.toObject()
   }
 }
