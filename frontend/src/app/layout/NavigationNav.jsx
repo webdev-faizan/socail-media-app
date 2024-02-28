@@ -21,7 +21,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
   }
   return (
     <>
-      <div className="fixed z-[100]" >
+      <div className="fixed z-[200]" >
         <CreatePostModal
           modalIsOpen={modalIsOpen}
           openModal={openModal}
@@ -32,17 +32,17 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
       <div className={`w-full  bg-[#1C4E80] md:fixed z-40 top-0`}>
         <div
           onClick={() => dispatch(false)}
-          className={`block md:hidden w-full fixed  top-0 bg-[rgba(51,51,51,.5)]  transform h-screen z-40 transition-all ${
+          className={`block md:hidden w-full fixed  top-0 bg-[rgba(51,51,51,.5)]  transform h-screen z-30 transition-all ${
             showSidebar ? "translate-x-0 " : "-translate-x-full delay-500"
           } ease-out`}
         ></div>
 
         <header
-          className={`fixed z-[100] transition-all top-0  ${
+          className={`fixed z-[44] transition-all top-0  ${
             showSidebar ? " delay-500" : "translate-x-[-100%] "
           } ease-out md:static md:translate-x-0 `}
         >
-          <div className="sidebar  bg-[#1C4E80]  md:bg-transparent  relative z-[100">
+          <div className="sidebar  bg-[#1C4E80]  md:bg-transparent  relative ">
             <div className="h-screen py-8 md:py-0  w-[350px] md:w-full md:h-[80px] bg-none bg-opacity-100 flex flex-col md:flex-row md:justify-between md:items-center px-8 md:px-[64px] ">
               <div className="flex  flex-col md:flex-row md:items-center  h-full justify-between w-full relative">
                 <div className="flex md:block items-center justify-between ">

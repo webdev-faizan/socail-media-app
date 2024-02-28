@@ -6,21 +6,32 @@ import { FaRegComment } from "react-icons/fa6";
 import { FaShare } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
-import LikeButtton from "../../Components/LikeButtton";
-import Comments from "../../Components/Comments";
 import ResponsiveLayoutWithSidebar from "../../layout/ResponsiveLayoutWithSidebar";
+import Comments from "../../Components/Comments";
+import LikeButtton from "../../Components/LikeButtton";
 import { GET_SHARE_POST } from "../../graphql/query/post";
+import ShareSocailMedial from "../../Components/ShareSocailMedial";
 const user_id = getCookie("user_id");
 
 const page = ({ params }) => {
+  const [showShare, setShowShare] = useState(false);
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [foundPost, setFoundpost] = useState(false);
   const id = params.id[0].toString();
   const { loading, data } = useQuery(GET_SHARE_POST, {
     variables: {
-      id: "65db2e08750a310a3c38cdcb",
+      id,
     },
     fetchPolicy: "cache-and-network",
+    onError: ({ graphQLErrors }) => {
+      if (graphQLErrors[0].status == 404) {
+        setFoundpost(true);
+      }
+    },
+    onCompleted: () => {
+      setFoundpost(false);
+    },
   });
   function openModal() {
     setIsOpen(true);
@@ -28,16 +39,18 @@ const page = ({ params }) => {
   function closeModal() {
     setIsOpen(false);
   }
-  // useQuery
-  // getSharePostTypeDefs
 
-  {
-    /* 
-      <section className="p-3 mt-[70px] md:mt-4 md:p-10">
-        post page {params.id}{" "}
-      </section> */
+  if (foundPost) {
+    return (
+      <>
+        <ResponsiveLayoutWithSidebar />
+
+        <div className="h-screen  text-5xl font-semibold text-center justify-center flex items-center w-screen sm:text-6xl">
+          No posts found. 😇😇
+        </div>
+      </>
+    );
   }
-  console.log(data);
   return (
     <>
       <ResponsiveLayoutWithSidebar />
@@ -128,7 +141,14 @@ const page = ({ params }) => {
                         {commentCount}{" "}
                       </div>
                       <div className="flex gap-1">
-                        <FaShare size={20} />
+                        <ShareSocailMedial
+                          showShare={showShare}
+                          url={`/post/${id}`}
+                          setShowShare={setShowShare}
+                        />
+                        <button onClick={() => setShowShare(!showShare)}>
+                          <FaShare size={20} />
+                        </button>
                       </div>
                     </div>
                   </div>

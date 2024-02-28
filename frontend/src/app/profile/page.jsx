@@ -1,13 +1,13 @@
 "use client";
 import Avatar from "react-avatar";
 import { FaCamera } from "react-icons/fa";
-import ResponsiveLayoutWithSidebar from "../layout/ResponsiveLayoutWithSidebar";
-import Cards from "../Components/Cards";
-import { PROFILE_CHANGE } from "../graphql/mutations/profile";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_USER_POST } from "../graphql/query/post";
-import { GET_USER_PERSONAL_INFO } from "../graphql/query/profile";
 import { ToastContainer, toast } from "react-toastify";
+import Cards from "../Components/Cards";
+import { useMutation, useQuery } from "@apollo/client";
+import { PROFILE_CHANGE } from "../graphql/mutations/profile";
+import { GET_USER_POST } from "../graphql/query/post";
+import ResponsiveLayoutWithSidebar from "../layout/ResponsiveLayoutWithSidebar";
+import { GET_USER_PERSONAL_INFO } from "../graphql/query/profile";
 
 const page = () => {
   const { data, refetch } = useQuery(GET_USER_PERSONAL_INFO);

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { useQuery } from "@apollo/client";
 import { FaRegComment } from "react-icons/fa6";
@@ -9,11 +9,13 @@ import Link from "next/link";
 const user_id = getCookie("user_id");
 import LikeButtton from "./LikeButtton";
 import Comments from "./Comments";
+import ShareSocailMedial from "./ShareSocailMedial";
 const Cards = ({ query }) => {
   const [postId, setPostId] = useState("");
+
   const [modalIsOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
-
+  const [showShare, setShowShare] = useState(false);
   const { loading, data, fetchMore } = useQuery(query, {
     variables: {
       page: 1,
@@ -98,7 +100,7 @@ const Cards = ({ query }) => {
                 );
 
               return (
-                <div className="max-w-sm relative bg-[#617f9c] border border-gray-200 rounded-lg shadow ">
+                <div className="max-w-sm relative  bg-[#617f9c] border border-gray-200 rounded-lg shadow ">
                   <Link
                     href={`/profile?user=${userid}`}
                     className="cursor-pointer "
@@ -127,16 +129,20 @@ const Cards = ({ query }) => {
                     className="cursor-pointer w-full block bg-white"
                     target="_blank"
                   >
-                    <img className="rounded-t-lg h-[250px]" src="image-1.jpg"  alt />
+                    <img
+                      className="rounded-t-lg h-[250px]"
+                      src="image-1.jpg"
+                      alt
+                    />
                   </Link>
-                  <div className="p-5">
+                  <div className="p-5 ">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 darks:text-white">
                       {title}
                     </h5>
                     <p className="mb-3 font-normal text-gray-700 darks:text-gray-400">
                       {description}
                     </p>
-                    <div className="flex  justify-between cursor-pointer">
+                    <div className="flex  justify-between cursor-pointer ">
                       <div className="flex gap-1">
                         <LikeButtton
                           postId={id}
@@ -154,8 +160,15 @@ const Cards = ({ query }) => {
                         />
                         {commentCount}{" "}
                       </div>
-                      <div className="flex gap-1">
-                        <FaShare size={20} />
+                      <div className="flex gap-1 ">
+                        <ShareSocailMedial
+                          showShare={showShare}
+                          url={`/post/${id}`}
+                          setShowShare={setShowShare}
+                        />
+                        <button onClick={() => setShowShare(!showShare)}>
+                          <FaShare size={20} />
+                        </button>
                       </div>
                     </div>
                   </div>

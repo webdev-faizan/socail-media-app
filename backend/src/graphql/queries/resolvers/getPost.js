@@ -93,7 +93,6 @@ export const getCommentsResolver = async (_, { postId }, context) => {
 }
 
 export const getSharePostResolver = async (_, { id }, context) => {
-  console.log(id)
   const { error } = await ProtectRoutes(context)
   if (error) {
     throw new GraphQLError('Session has expired', {
