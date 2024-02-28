@@ -16,7 +16,6 @@ export const GET_ALL_POST = gql`
           firstName
           lastName
           id
-          email
         }
       }
     }
@@ -38,7 +37,6 @@ export const GET_USER_POST = gql`
           firstName
           lastName
           id
-          email
         }
       }
     }
@@ -54,6 +52,29 @@ export const GET_COMMENTS = gql`
         user {
           firstName
           lastName
+        }
+      }
+    }
+  }
+`;
+
+export const GET_SHARE_POST = gql`
+  query ($id: String) {
+    getSharePost(id: $id) {
+      data {
+        id
+        title
+        description
+        attachment
+        createdAt
+        likeCount
+        commentCount
+        likes
+        postOwner {
+          firstName
+          lastName
+          id
+          email
         }
       }
     }

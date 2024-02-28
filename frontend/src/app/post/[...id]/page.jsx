@@ -1,79 +1,56 @@
 "use client";
+import { useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { useQuery } from "@apollo/client";
 import { FaRegComment } from "react-icons/fa6";
 import { FaShare } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
+import LikeButtton from "../../Components/LikeButtton";
+import Comments from "../../Components/Comments";
+import ResponsiveLayoutWithSidebar from "../../layout/ResponsiveLayoutWithSidebar";
+import { GET_SHARE_POST } from "../../graphql/query/post";
 const user_id = getCookie("user_id");
-import LikeButtton from "./LikeButtton";
-import Comments from "./Comments";
-const Cards = ({ query }) => {
+
+const page = ({ params }) => {
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [page, setPage] = useState(1);
-
-  const { loading, data, fetchMore } = useQuery(query, {
+  const id = params.id[0].toString();
+  const { loading, data } = useQuery(GET_SHARE_POST, {
     variables: {
-      page: 1,
-      limit: 1,
+      id: "65db2e08750a310a3c38cdcb",
     },
     fetchPolicy: "cache-and-network",
   });
-  const handleScroll = () => {
-    if (
-      window.pageYOffset + window.innerHeight >=
-      document.documentElement.scrollHeight
-    ) {
-      setPage(page + 1);
-      fetchMore({
-        variables: {
-          limit: 2,
-          page: page,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          return {
-            ...prev,
-            ...fetchMoreResult,
-          };
-        },
-      });
-    }
-  };
   function openModal() {
     setIsOpen(true);
   }
   function closeModal() {
     setIsOpen(false);
   }
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+  // useQuery
+  // getSharePostTypeDefs
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [data, fetchMore]);
-  useEffect(() => {
-    if (modalIsOpen) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "auto";
-    }
-  }, [modalIsOpen]);
-
-  const POST = data?.getAllPost?.data || data?.getUserPost?.data;
+  {
+    /* 
+      <section className="p-3 mt-[70px] md:mt-4 md:p-10">
+        post page {params.id}{" "}
+      </section> */
+  }
+  console.log(data);
   return (
-    <div>
+    <>
+      <ResponsiveLayoutWithSidebar />
       <Comments
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
         postId={postId}
       />
+      {/*  */}
       <div className="p-3 mt-[70px] md:mt-12 md:p-10">
-        <div className="flex gap-10  justify-center md:justify-start flex-wrap ">
-          <div className="flex  flex-wrap justify-between gap-6">
-            {POST?.map((data) => {
+        <div className="flex gap-10  justify-center flex-wrap  w-full">
+          <div className="flex  justify-center ">
+            {data?.getSharePost.data.map((data) => {
               const {
                 createdAt,
                 id,
@@ -98,9 +75,9 @@ const Cards = ({ query }) => {
                 );
 
               return (
-                <div className="max-w-sm relative bg-[#617f9c] border border-gray-200 rounded-lg shadow ">
+                <div className=" relative bg-[#617f9c] border border-gray-200 rounded-lg shadow w-full sm:w-[360px] md:w-[500px] ">
                   <Link
-                    href={`/profile?user=${userid}`}
+                    href={`/profile/user/${userid}`}
                     className="cursor-pointer "
                   >
                     <div className="flex items-center p-2 ">
@@ -121,14 +98,10 @@ const Cards = ({ query }) => {
                       </div>
                     </div>
                   </Link>
-
-                  <Link
-                    href={`/post/${id}`}
-                    className="cursor-pointer w-full block bg-white"
-                    target="_blank"
-                  >
-                    <img className="rounded-t-lg h-[250px]" src="image-1.jpg"  alt />
-                  </Link>
+                  <img
+                    className="rounded-t-lg  min-h-[140px] md:min-h-[200px]"
+                    src="/image-1.jpg"
+                  />
                   <div className="p-5">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 darks:text-white">
                       {title}
@@ -165,8 +138,8 @@ const Cards = ({ query }) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Cards;
+export default page;

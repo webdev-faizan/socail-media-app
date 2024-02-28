@@ -127,3 +127,34 @@ type Query {
 }
 
 `
+
+export const getSharePostTypeDefs = `
+scalar Date
+
+type Query {
+  getSharePost(id:String): GetSharePostResponse
+  }
+  type OwnerInfos{
+    firstName:String
+    lastName:String
+    id:ID
+    email:String
+}
+  type getSharePostInfo {
+    id:String
+    title: String
+    description: String
+    attachment: String
+    createdAt: Date
+    likeCount: Int
+    commentCount: Int
+    postOwner:OwnerInfos
+    likes: [ID] 
+  }
+ 
+
+  type GetSharePostResponse {
+    message: String
+    data: [getSharePostInfo]
+  }
+`

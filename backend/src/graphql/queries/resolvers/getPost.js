@@ -91,3 +91,37 @@ export const getCommentsResolver = async (_, { postId }, context) => {
     data: getComments,
   }
 }
+
+export const getSharePostResolver = async (_, { id }, context) => {
+  console.log(id)
+  const { error } = await ProtectRoutes(context)
+  if (error) {
+    throw new GraphQLError('Session has expired', {
+      extensions: {
+        code: 'BAD_REQUEST',
+        http: {
+          status: 400,
+        },
+      },
+    })
+  }
+  const userinfo = await PostModel.findById(id).populate(
+    'postOwner',
+    'firstName lastName email _id',
+  )
+  if (userinfo) {
+    return {
+      message: 'Successfully get post ',
+      data: [userinfo],
+    }
+  } else {
+    throw new GraphQLError('Not found any post', {
+      extensions: {
+        code: 'BAD_REQUEST',
+        http: {
+          status: 404,
+        },
+      },
+    })
+  }
+}

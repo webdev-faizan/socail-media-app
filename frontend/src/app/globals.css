@@ -1,10 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html,
-body {
-  height: 100vh;
-}
 
 .modal {
   background-color: orange;
@@ -15,7 +11,4 @@ body {
 .Toastify {
   position: absolute;
   z-index: -999999;
-}
-.faizans {
-  /* height: 300px !important; */
 }
