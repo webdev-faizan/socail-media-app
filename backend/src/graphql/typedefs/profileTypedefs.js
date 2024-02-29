@@ -17,7 +17,7 @@ export const getProfileInformationTypeDefs = `
 
   type GetUserPersonalInfoResponse {
     message: String
-      id:ID
+      _id:ID
       firstName: String
       lastName: String
       createdAt: Date

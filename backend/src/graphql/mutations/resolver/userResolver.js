@@ -10,6 +10,7 @@ import bcrypt from 'bcryptjs'
 const SignupUser = async (_, userInfo) => {
   const { firstName, lastName, email, password, tac } =
     userInfo.registerationForm
+  console.log(userInfo.registerationForm)
   const isAlreadyUserRegister = await userModel.findOne({ email })
   if (isAlreadyUserRegister) {
     if (isAlreadyUserRegister) {

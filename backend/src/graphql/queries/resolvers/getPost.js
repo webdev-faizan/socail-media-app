@@ -56,7 +56,7 @@ export const getUserPostsResolver = async (
   const validPage = pageNo > 1 ? pageNo : 1
   const skip = (validPage - 1) * pageSize
   const allPosts = await PostModel.find({
-    postOwner: '65bce0a774ce14714e0f4186',
+    postOwner: id,
   })
     .select('-comments')
     .populate('postOwner', 'firstName lastName email _id')
