@@ -30,8 +30,8 @@ export const createPostResolver = async (_, { postInfo }, context) => {
     })
   } else {
     const { url } = result
-    const this_post = await new PostModel({
-      userId: id,
+    await new PostModel({
+      postOwner: id,
       title,
       description,
       attachment: url,
