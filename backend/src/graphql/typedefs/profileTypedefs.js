@@ -26,3 +26,21 @@ export const getProfileInformationTypeDefs = `
       emailVerified: Boolean
   }
 `
+export const getViewProfileInformationTypeDefs = `
+  scalar Date
+
+  type Query {
+    getViewUserInfo(id:ID!): GetUserPersonalInfoResponse
+  }
+
+  type GetUserPersonalInfoResponse {
+    message: String
+      _id:ID
+      firstName: String
+      lastName: String
+      createdAt: Date
+      email: String
+      profile: String
+      emailVerified: Boolean
+  }
+`

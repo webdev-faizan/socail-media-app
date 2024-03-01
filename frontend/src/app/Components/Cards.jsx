@@ -12,8 +12,7 @@ import Comments from "./Comments";
 import ShareSocailMedial from "./ShareSocailMedial";
 const Cards = ({ query }) => {
   const [postId, setPostId] = useState("");
-
-  const [modalIsOpen, setIsOpen] = useState(false);
+    const [modalIsOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [showShare, setShowShare] = useState(false);
   const { loading, data, fetchMore } = useQuery(query, {
@@ -100,9 +99,9 @@ const Cards = ({ query }) => {
                 );
 
               return (
-                <div className="max-w-sm relative  bg-[#617f9c] border border-gray-200 rounded-lg shadow ">
+                <div className="max-w-sm relative  bg-blue-500 border border-gray-200 rounded-lg shadow ">
                   <Link
-                    href={`/profile?user=${userid}`}
+                    href={`/profile/user/${userid}`}
                     className="cursor-pointer "
                   >
                     <div className="flex items-center p-2 ">
@@ -114,9 +113,10 @@ const Cards = ({ query }) => {
                         />
                       </div>
                       <div className="flex-1 min-w-0 ms-4">
-                        <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                          {firstName + " " + lastName}
+                        <p className="text-xl font-medium dark:text-white capitalize">
+                          {firstName} {lastName}
                         </p>
+
                         <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-[2px]">
                           {postCreatedAt}
                         </p>

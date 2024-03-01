@@ -108,12 +108,7 @@ export const getSharePostResolver = async (_, { id }, context) => {
     'postOwner',
     'firstName lastName email _id',
   )
-  if (userinfo) {
-    return {
-      message: 'Successfully get post ',
-      data: [userinfo],
-    }
-  } else {
+  if (userinfo.length == 0) {
     throw new GraphQLError('Not found any post', {
       extensions: {
         code: 'BAD_REQUEST',
@@ -122,5 +117,56 @@ export const getSharePostResolver = async (_, { id }, context) => {
         },
       },
     })
+  } else {
+    return {
+      message: 'Successfully get post ',
+      data: [userinfo],
+    }
+  }
+}
+// ! get view user post
+export const getViewUserPostsResolver = async (
+  _,
+  { page = 1, limit = 10, id },
+  context,
+) => {
+  const { error } = await ProtectRoutes(context)
+  if (error) {
+    throw new GraphQLError('Session has expired', {
+      extensions: {
+        code: 'BAD_REQUEST',
+        http: {
+          status: 400,
+        },
+      },
+    })
+  }
+
+  const pageSize = parseInt(limit)
+  const pageNo = parseInt(page) || 1
+  const validPage = pageNo > 1 ? pageNo : 1
+  const skip = (validPage - 1) * pageSize
+  const allPosts = await PostModel.find({
+    postOwner: id,
+  })
+    .select('-comments')
+    .populate('postOwner', 'firstName lastName email _id')
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+  if (allPosts.length == 0) {
+    throw new GraphQLError('Not-found any post', {
+      extensions: {
+        code: 'NOT_FOUND',
+        http: {
+          status: 404,
+        },
+      },
+    })
+  } else {
+    return {
+      message: 'Posts fetched successfully',
+      data: allPosts,
+    }
   }
 }

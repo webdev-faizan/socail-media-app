@@ -80,3 +80,26 @@ export const GET_SHARE_POST = gql`
     }
   }
 `;
+
+export const GET_VIEW_USER_POST = gql`
+  query ViewUserPost($pageNo: Int, $limit: Int, $id: ID) {
+    getViewUserPost(page: $pageNo, limit: $limit, id: $id) {
+      data {
+        title
+        description
+        attachment
+        createdAt
+        likeCount
+        commentCount
+        likes
+        _id
+        postOwner {
+          firstName
+          lastName
+          profile
+          _id
+        }
+      }
+    }
+  }
+`;

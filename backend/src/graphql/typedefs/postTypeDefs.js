@@ -71,7 +71,7 @@ type Query {
   }
 `
 
-//!get All post
+//!get User post
 export const getUserPostTypeDefs = `
 scalar Date
 
@@ -156,5 +156,37 @@ type Query {
   type GetSharePostResponse {
     message: String
     data: [getSharePostInfo]
+  }
+`
+// ! get veiw user post
+export const getViewUserTypeDefs = `
+scalar Date
+
+type Query {
+  getViewUserPost(page: Int, limit: Int,id:ID): GetUserPostResponse
+  }
+  
+  type PostInfo {
+    _id:ID
+    title: String
+    description: String
+    attachment: String
+    createdAt: Date
+    likeCount: Int
+    commentCount: Int
+    postOwner:OwnerInfo
+    likes: [ID] 
+  }
+ 
+  type OwnerInfo{
+    firstName:String
+    lastName:String
+    _id:ID
+    email:String
+    profile:String
+}
+  type GetUserPostResponse {
+    message: String
+    data: [PostInfo]
   }
 `
