@@ -11,18 +11,39 @@ import LikeButtton from "./LikeButtton";
 import Comments from "./Comments";
 import ShareSocailMedial from "./ShareSocailMedial";
 import CardSkeletonLoader from "../Components/loader/CardSkeletonLoader";
+import { useSearchParams } from "next/navigation";
+
 const Cards = ({ query }) => {
+  const searchParams = useSearchParams();
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [showShare, setShowShare] = useState(false);
+  const [isSerachUser, setSerachUser] = useState(false);
+  const [foundPost, setFoundpost] = useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
   const { loading, data, fetchMore } = useQuery(query, {
     variables: {
       page: 1,
       limit: 10,
-      
+      ...(window.location.pathname == "/" && {
+        query: searchParams.get("query"),
+      }),
     },
     fetchPolicy: "cache-and-network",
+    onError: ({ graphQLErrors }) => {
+      if (graphQLErrors[0].status == 404) {
+        setFoundpost(true);
+      }
+    },
+    onCompleted: () => {
+      setFoundpost(false);
+    },
   });
   const handleScroll = () => {
     if (
@@ -44,12 +65,7 @@ const Cards = ({ query }) => {
       });
     }
   };
-  function openModal() {
-    setIsOpen(true);
-  }
-  function closeModal() {
-    setIsOpen(false);
-  }
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
 
@@ -57,15 +73,17 @@ const Cards = ({ query }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [data, fetchMore]);
-  useEffect(() => {
-    if (modalIsOpen) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "auto";
-    }
-  }, [modalIsOpen]);
 
   const POST = data?.getAllPost?.data || data?.getUserPost?.data;
+  if (foundPost) {
+    return (
+      <>
+        <div className="h-screen  text-5xl font-semibold text-center justify-center flex items-center w-screen sm:text-6xl">
+          No posts found. 😇😇
+        </div>
+      </>
+    );
+  }
 
   return (
     <div>
@@ -77,7 +95,7 @@ const Cards = ({ query }) => {
       <div className="p-3 mt-[70px] md:mt-12 md:p-10">
         <div className="flex gap-2 flex-wrap justify-center">
           {loading &&
-            [1, 2, 3, 4, 5, 6, 7, 8, ].map((_, index) => (
+            [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
               <CardSkeletonLoader key={index} />
             ))}
         </div>

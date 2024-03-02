@@ -18,18 +18,31 @@ export const getAllPostsResolver = async (
       },
     })
   }
+  console.log('query', query)
 
   const pageSize = parseInt(limit)
   const pageNo = parseInt(page) || 1
   const validPage = pageNo > 1 ? pageNo : 1
   const skip = (validPage - 1) * pageSize
-  if (true) {
-    const allPosts = await PostModel.find({$text:{$search:"how can i make money"}})
+  if (query) {
+    const allPosts = await PostModel.find({
+      $text: { $search: query },
+    })
       .select('-comments')
       .populate('postOwner', 'firstName lastName email _id')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
+    if (allPosts.length == 0) {
+      throw new GraphQLError('Not found any post', {
+        extensions: {
+          code: 'NOT_FOUND',
+          http: {
+            status: 404,
+          },
+        },
+      })
+    }
     return {
       message: 'Posts fetched successfully',
       data: allPosts,
@@ -124,7 +137,7 @@ export const getSharePostResolver = async (_, { id }, context) => {
   if (userinfo.length == 0) {
     throw new GraphQLError('Not found any post', {
       extensions: {
-        code: 'BAD_REQUEST',
+        code: 'NOT_FOUND',
         http: {
           status: 404,
         },

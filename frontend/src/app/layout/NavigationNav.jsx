@@ -4,12 +4,17 @@ import Link from "next/link";
 import { navItem } from "../data/app";
 import { IoMdClose } from "react-icons/io";
 import { usePathname } from "next/navigation";
+import { IoSearchSharp } from "react-icons/io5";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TbLogout2 } from "react-icons/tb";
 import CreatePostModal from "../Components/CreatePostModal";
 
 const NavigationNav = ({ showSidebar, dispatch }) => {
   const path = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   function openModal() {
     setIsOpen(true);
@@ -17,12 +22,19 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
 
   function closeModal() {
     setIsOpen(false);
-
   }
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (!query) {
+      router.replace("/", undefined, { shallow: true });
+      return;
+    }
+    router.push(`/?query=${query}`);
+  };
   return (
     <>
-      <div className="fixed z-[200]" >
+      <div className="fixed z-[200]">
         <CreatePostModal
           modalIsOpen={modalIsOpen}
           openModal={openModal}
@@ -53,10 +65,20 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                       className="hover:scale-110 transition-all wx] h-[50px] object-contain"
                       alt=""
                     />
-                    <input
-                      type="search"
-                      className="h-[40px] rounded outline-none text-base px-2 hidden md:block "
-                    />
+                    <form
+                      action=""
+                      onSubmit={handleClick}
+                      className="relative flex items-center"
+                    >
+                      <input
+                        onChange={(e) => setQuery(e.target.value)}
+                        type="text"
+                        className="h-[40px] rounded outline-none text-base pl-2 hidden md:block pr-9"
+                      />
+                      <button className="absolute right-3" type="submit">
+                        <IoSearchSharp size={20} />
+                      </button>
+                    </form>
                   </div>
                   <div className="block md:hidden">
                     <IoMdClose
