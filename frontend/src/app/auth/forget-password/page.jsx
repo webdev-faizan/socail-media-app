@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useMutation } from "@apollo/client";
 import { ToastContainer, toast } from "react-toastify";
+import RequireGuest from "../../Components/RequireGuest";
 
 import { FORTGET_PASSWORD } from "../../graphql/mutations/auth";
 import { useRouter } from "next/navigation";
@@ -53,9 +54,9 @@ const forgetPassword = () => {
     });
   };
   return (
-    <section>
+    <RequireGuest>
       <ToastContainer />
-      <div className="flex min-h-screen items-center justify-center  h-full px-3">
+      <section className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">
             <h6 className="  text-[#1C4E80]  text-[26px] font-medium">
@@ -109,8 +110,8 @@ const forgetPassword = () => {
             </small>
           </form>
         </div>
-      </div>
-    </section>
+      </section>
+    </RequireGuest>
   );
 };
 export default forgetPassword;

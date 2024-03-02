@@ -7,14 +7,13 @@ import { GET_ALL_POST } from "./graphql/query/post";
 import Cards from "./Components/Cards";
 import ShareSocailMedial from "./Components/ShareSocailMedial";
 import CardSkeletonLoader from "./Components/loader/CardSkeletonLoader";
+import ProtectRoutes from "./Components/ProtectRoutes";
 export default function Home() {
-  if (true) {
-  }
   return (
-    <div className="">
+    <>
       <ResponsiveLayoutWithSidebar />
       <Cards query={GET_ALL_POST} />
-    </div>
+    </>
   );
 }
 

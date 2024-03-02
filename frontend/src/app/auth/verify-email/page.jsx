@@ -4,6 +4,8 @@ import React from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { VERIFY_EMAIL } from "../../graphql/mutations/auth";
 import { useSearchParams } from "next/navigation";
+import RequireGuest from "../../Components/RequireGuest";
+
 import { toast, ToastContainer } from "react-toastify";
 const EmailVerificationComponent = () => {
   const searchParams = useSearchParams();
@@ -30,7 +32,7 @@ const EmailVerificationComponent = () => {
     });
   };
   return (
-    <>
+    <RequireGuest>
       <ToastContainer />
       <section className="h-screen flex justify-center items-center w-full bg-red-500">
         <div className="email-verification min-m-[369px] max-w-md bg-white rounded-lg shadow-md p-8">
@@ -51,7 +53,7 @@ const EmailVerificationComponent = () => {
           </div>
         </div>
       </section>
-    </>
+    </RequireGuest>
   );
 };
 

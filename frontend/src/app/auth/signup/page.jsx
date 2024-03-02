@@ -13,6 +13,8 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { SIGNUP_USER } from "../../graphql/mutations/auth";
 import { useRouter } from "next/navigation";
+import RequireGuest from "../../Components/RequireGuest";
+
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
   firstName: yup
@@ -102,7 +104,7 @@ const signup = () => {
     }
   };
   return (
-    <>
+    <RequireGuest>
       <ToastContainer />
       {showModal && (
         <RegistrationModal
@@ -299,7 +301,7 @@ const signup = () => {
           </div>
         </div>
       </section>
-    </>
+    </RequireGuest>
   );
 };
 export default signup;
