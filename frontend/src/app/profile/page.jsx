@@ -12,7 +12,6 @@ import { GET_USER_PERSONAL_INFO } from "../graphql/query/profile";
 import Cards from "../Components/Cards";
 import ShareSocailMedial from "../Components/ShareSocailMedial";
 
-
 const page = () => {
   const { data, refetch } = useQuery(GET_USER_PERSONAL_INFO);
   const [showShare, setShowShare] = useState(false);
@@ -82,7 +81,7 @@ const page = () => {
         <br />
         <div className="flex justify-center gap-2">
           <Link
-            href={`/user${_id}`}
+            href={`/user/${_id}`}
             class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
             Preview Profile

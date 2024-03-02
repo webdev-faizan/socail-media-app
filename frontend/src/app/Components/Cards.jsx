@@ -10,15 +10,17 @@ const user_id = getCookie("user_id");
 import LikeButtton from "./LikeButtton";
 import Comments from "./Comments";
 import ShareSocailMedial from "./ShareSocailMedial";
+import CardSkeletonLoader from "../Components/loader/CardSkeletonLoader";
 const Cards = ({ query }) => {
   const [postId, setPostId] = useState("");
-    const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [showShare, setShowShare] = useState(false);
   const { loading, data, fetchMore } = useQuery(query, {
     variables: {
       page: 1,
-      limit: 1,
+      limit: 10,
+      
     },
     fetchPolicy: "cache-and-network",
   });
@@ -30,7 +32,7 @@ const Cards = ({ query }) => {
       setPage(page + 1);
       fetchMore({
         variables: {
-          limit: 2,
+          limit: 10,
           page: page,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
@@ -64,6 +66,7 @@ const Cards = ({ query }) => {
   }, [modalIsOpen]);
 
   const POST = data?.getAllPost?.data || data?.getUserPost?.data;
+
   return (
     <div>
       <Comments
@@ -72,6 +75,12 @@ const Cards = ({ query }) => {
         postId={postId}
       />
       <div className="p-3 mt-[70px] md:mt-12 md:p-10">
+        <div className="flex gap-2 flex-wrap justify-center">
+          {loading &&
+            [1, 2, 3, 4, 5, 6, 7, 8, ].map((_, index) => (
+              <CardSkeletonLoader key={index} />
+            ))}
+        </div>
         <div className="flex gap-10  justify-center md:justify-start flex-wrap ">
           <div className="flex  flex-wrap justify-between gap-6">
             {POST?.map((data) => {
@@ -99,7 +108,7 @@ const Cards = ({ query }) => {
                 );
 
               return (
-                <div className="max-w-sm relative  bg-blue-500 border border-gray-200 rounded-lg shadow ">
+                <div className="max-w-sm relative  bg-[#125597] border-gray-200 rounded-lg shadow h-fit">
                   <Link
                     href={`/profile/user/${userid}`}
                     className="cursor-pointer "
@@ -136,10 +145,10 @@ const Cards = ({ query }) => {
                     />
                   </Link>
                   <div className="p-5 ">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 darks:text-white">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
                       {title}
                     </h5>
-                    <p className="mb-3 font-normal text-gray-700 darks:text-gray-400">
+                    <p className="mb-3 font-normal text-white ">
                       {description}
                     </p>
                     <div className="flex  justify-between cursor-pointer ">

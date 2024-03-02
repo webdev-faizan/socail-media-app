@@ -12,6 +12,7 @@ import Link from "next/link";
 import { FaRegComment, FaShare } from "react-icons/fa";
 import LikeButtton from "../../../Components/LikeButtton";
 import Comments from "../../../Components/Comments";
+import CardSkeletonLoader from "../../../Components/loader/CardSkeletonLoader";
 
 const Page = ({ params }) => {
   const user_id = params.id[0];
@@ -33,9 +34,9 @@ const Page = ({ params }) => {
   function closeModal() {
     setIsOpen(false);
   }
-  const { data, fetchMore } = useQuery(GET_VIEW_USER_POST, {
+  const { data, fetchMore, loading } = useQuery(GET_VIEW_USER_POST, {
     variables: {
-      page: 1,
+      page: 10,
       limit: 1,
       id: user_id,
     },
@@ -47,7 +48,6 @@ const Page = ({ params }) => {
       setFoundpost(false);
     },
   });
-  console.log(data);
   const handleScroll = () => {
     if (
       window.pageYOffset + window.innerHeight >=
@@ -57,7 +57,7 @@ const Page = ({ params }) => {
       fetchMore({
         variables: {
           id: user_id,
-          limit: 2,
+          limit: 10,
           page: page,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
@@ -112,7 +112,7 @@ const Page = ({ params }) => {
               lastName ? lastName : ""
             }`}
             size={200}
-            round={true}
+                   round={true}
           />
         </div>
         <div className="flex justify-center items-center font-medium text-2xl text-gray-800">
@@ -238,6 +238,10 @@ const Page = ({ params }) => {
               </div>
             </div>
           </div>
+          {loading &&
+            [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+              <CardSkeletonLoader key={index} />
+            ))}
         </div>
       </div>
     </>

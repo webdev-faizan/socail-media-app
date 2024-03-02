@@ -4,7 +4,7 @@ import { PostModel, commentModel } from '../../../model/postModel.js'
 
 export const getAllPostsResolver = async (
   _,
-  { page = 1, limit = 10 },
+  { page = 1, limit = 10, query = '' },
   context,
 ) => {
   const { error } = await ProtectRoutes(context)
@@ -23,6 +23,19 @@ export const getAllPostsResolver = async (
   const pageNo = parseInt(page) || 1
   const validPage = pageNo > 1 ? pageNo : 1
   const skip = (validPage - 1) * pageSize
+  if (true) {
+    const allPosts = await PostModel.find({$text:{$search:"how can i make money"}})
+      .select('-comments')
+      .populate('postOwner', 'firstName lastName email _id')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+    return {
+      message: 'Posts fetched successfully',
+      data: allPosts,
+    }
+  }
+
   const allPosts = await PostModel.find({})
     .select('-comments')
     .populate('postOwner', 'firstName lastName email _id')

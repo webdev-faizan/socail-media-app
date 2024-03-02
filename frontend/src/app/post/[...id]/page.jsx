@@ -11,6 +11,7 @@ import Comments from "../../Components/Comments";
 import LikeButtton from "../../Components/LikeButtton";
 import { GET_SHARE_POST } from "../../graphql/query/post";
 import ShareSocailMedial from "../../Components/ShareSocailMedial";
+import CardSkeletonLoader from "../../Components/loader/CardSkeletonLoader";
 const user_id = getCookie("user_id");
 
 const page = ({ params }) => {
@@ -60,7 +61,12 @@ const page = ({ params }) => {
         postId={postId}
       />
       {/*  */}
+
       <div className="p-3 mt-[70px] md:mt-12 md:p-10">
+        {loading &&
+          [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+            <CardSkeletonLoader key={index} />
+          ))}
         <div className="flex gap-10  justify-center flex-wrap  w-full">
           <div className="flex  justify-center ">
             {data?.getSharePost.data.map((data) => {

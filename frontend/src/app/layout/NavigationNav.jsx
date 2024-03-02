@@ -19,6 +19,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
     setIsOpen(false);
 
   }
+
   return (
     <>
       <div className="fixed z-[200]" >

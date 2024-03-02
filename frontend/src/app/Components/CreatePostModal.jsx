@@ -15,12 +15,14 @@ const schemaSignup = yup.object({
     .string()
     .trim()
     .required(fieldIsRequired)
-    .min(4, "min length must be at least 3 characters"),
+    .min(4, "min length must be at least 3 characters")
+    .max(30, "Max length must be less than 40 characters"),
   description: yup
     .string()
     .trim()
     .required(fieldIsRequired)
-    .min(20, "min length must be at least 20 characters"),
+    .min(10, "min length must be at least 20 characters")
+    .max(50, " the description to less than 20 characters."),
   atttachment: yup
     .mixed()
     .required(fieldIsRequired)
@@ -38,6 +40,7 @@ const schemaSignup = yup.object({
 const customStyles = {
   overlay: {
     zIndex: 58,
+    background: "rgba(0, 0, 0, 0.4)",
   },
   content: {
     top: "50%",

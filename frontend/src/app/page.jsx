@@ -5,14 +5,16 @@ import ResponsiveLayoutWithSidebar from "./layout/ResponsiveLayoutWithSidebar";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_POST } from "./graphql/query/post";
 import Cards from "./Components/Cards";
-import ShareSocailMedial from './Components/ShareSocailMedial'
+import ShareSocailMedial from "./Components/ShareSocailMedial";
+import CardSkeletonLoader from "./Components/loader/CardSkeletonLoader";
 export default function Home() {
+  if (true) {
+  }
   return (
-    <>
+    <div className="">
       <ResponsiveLayoutWithSidebar />
-      {/* <ShareSocailMedial /> */}
       <Cards query={GET_ALL_POST} />
-    </>
+    </div>
   );
 }
 

@@ -138,6 +138,8 @@ export default Comments;
 const customStyles = {
   overlay: {
     zIndex: 49,
+    background: "rgba(0, 0, 0, 0.4)",
+
     // overflowY: "hidden",
   },
   content: {
