@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaRegFaceDizzy } from "react-icons/fa6";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@apollo/client";
 import { NEW_PASSWORD } from "../../graphql/mutations/auth";
 import { ToastContainer, toast } from "react-toastify";
@@ -33,6 +33,8 @@ const schemaSignup = yup.object({
 const Newpassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
+  const router=useRouter()
+
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -73,9 +75,9 @@ const Newpassword = () => {
     });
   };
   return (
-    <section>
+    <RequireGuest>
       <ToastContainer />
-      <div className="flex min-h-screen items-center justify-center  h-full px-3">
+      <section className="flex min-h-screen items-center justify-center  h-full px-3">
         <div className="w-full xsm:w-[400px]">
           <div className="py-3">
             <h6 className="  text-[#1C4E80]  text-[26px] font-medium capitalize">
@@ -160,8 +162,8 @@ const Newpassword = () => {
             </div>
           </form>
         </div>
-      </div>
-    </section>
+      </section>
+    </RequireGuest>
   );
 };
 export default Newpassword;

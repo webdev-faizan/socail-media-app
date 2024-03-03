@@ -3,12 +3,13 @@ import { useMutation } from "@apollo/client";
 import React from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { VERIFY_EMAIL } from "../../graphql/mutations/auth";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import RequireGuest from "../../Components/RequireGuest";
 
 import { toast, ToastContainer } from "react-toastify";
 const EmailVerificationComponent = () => {
   const searchParams = useSearchParams();
+  const router=useRouter()
   const [mutateFunction, { loading }] = useMutation(VERIFY_EMAIL, {
     fetchPolicy: "no-cache",
     onCompleted: ({ emailVerification }) => {

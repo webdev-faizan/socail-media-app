@@ -8,6 +8,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TbLogout2 } from "react-icons/tb";
 import CreatePostModal from "../Components/CreatePostModal";
+import { deleteCookie } from "cookies-next";
 
 const NavigationNav = ({ showSidebar, dispatch }) => {
   const path = usePathname();
@@ -107,9 +108,15 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                   })}
                 </nav>
 
-                <div className="cursor-pointer ">
+                <button
+                  onClick={() => {
+                    deleteCookie("auth");
+                    deleteCookie("user_id");
+                    router.push("/auth/login");
+                  }}
+                >
                   <TbLogout2 color="white" size={30} />
-                </div>
+                </button>
               </div>
             </div>
           </div>

@@ -3,10 +3,13 @@ import {
   getComments,
   getUserPostTypeDefs,
   getSharePostTypeDefs,
-  getViewUserTypeDefs
-  
+  getViewUserTypeDefs,
 } from '../typedefs/postTypeDefs.js'
-import { getProfileInformationTypeDefs ,getViewProfileInformationTypeDefs} from '../typedefs/profileTypedefs.js'
+import {
+  getProfileInformationTypeDefs,
+  getViewProfileInformationTypeDefs,
+} from '../typedefs/profileTypedefs.js'
+import { userStatusTypeDefs } from './userStatusTypeDefs.js'
 
 const queryTypeDefs = `
 ${getAllPostTypeDefs}
@@ -16,6 +19,7 @@ ${getProfileInformationTypeDefs}
 ${getSharePostTypeDefs}
 ${getViewUserTypeDefs}
 ${getViewProfileInformationTypeDefs}
+${userStatusTypeDefs}
 
 `
 

@@ -1,13 +1,17 @@
+"use client";
 import { hasCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-const RequireGuest = ({ Children }) => {
+const RequireGuest = ({ children }) => {
   const router = useRouter();
-  if (hasCookie("auth")) {
-    router("/");
-  }
-  return <>{Children}</>;
+  useEffect(() => {
+    if (hasCookie("auth", { path: "/" })) {
+      router.push("/");
+    }
+  }, []);
+
+  return <>{children}</>;
 };
 
 export default RequireGuest;

@@ -10,10 +10,10 @@ import CardSkeletonLoader from "./Components/loader/CardSkeletonLoader";
 import ProtectRoutes from "./Components/ProtectRoutes";
 export default function Home() {
   return (
-    <>
+    <ProtectRoutes>
       <ResponsiveLayoutWithSidebar />
       <Cards query={GET_ALL_POST} />
-    </>
+    </ProtectRoutes>
   );
 }
 

@@ -46,10 +46,7 @@ const signup = () => {
       });
     },
     onCompleted: ({ loginUser }) => {
-      toast.success(loginUser.message, {
-        autoClose: 500,
-      });
-      const expires = new Date(Date.now() + 24 * 60 * 60 * 1000 + 100);
+      const expires = new Date(Date.now() + 10 + 24 * 60 * 60 * 1000 + 100);
       setCookie("auth", loginUser.token, {
         expires,
         secure: true,
@@ -60,8 +57,10 @@ const signup = () => {
         secure: true,
         path: "/",
       });
+      // router.push("/");
+      window.location.href = "/";
+
       reset();
-      router.push("/");
     },
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -79,9 +78,9 @@ const signup = () => {
     });
   };
   return (
-    <RequireGuest>
+    <>
       <ToastContainer />
-      <section>
+      <RequireGuest>
         <div className="flex min-h-screen items-center justify-center  h-full px-3">
           <div className="w-full xsm:w-[400px]">
             <div className="py-3">
@@ -195,8 +194,8 @@ const signup = () => {
             </form>
           </div>
         </div>
-      </section>
-    </RequireGuest>
+      </RequireGuest>
+    </>
   );
 };
 export default signup;
