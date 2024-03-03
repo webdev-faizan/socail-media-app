@@ -12,3 +12,6 @@
   position: absolute;
   z-index: -999999;
 }
+.body {
+  background-color: #f7f4f4;
+}

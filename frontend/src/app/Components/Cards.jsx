@@ -2,16 +2,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { useQuery } from "@apollo/client";
-import { FaRegComment } from "react-icons/fa6";
-import { FaShare } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
-const user_id = getCookie("user_id");
 import LikeButtton from "./LikeButtton";
 import Comments from "./Comments";
 import ShareSocailMedial from "./ShareSocailMedial";
 import CardSkeletonLoader from "../Components/loader/CardSkeletonLoader";
 import { useSearchParams } from "next/navigation";
+import { IoIosSend } from "react-icons/io";
+import { TfiCommentsSmiley } from "react-icons/tfi";
+const user_id = getCookie("user_id");
 
 const Cards = ({ query }) => {
   const searchParams = useSearchParams();
@@ -92,15 +92,17 @@ const Cards = ({ query }) => {
         closeModal={closeModal}
         postId={postId}
       />
-      <div className="p-3 mt-[70px] md:mt-12 md:p-10">
-        <div className="flex gap-2 flex-wrap justify-center">
-          {loading &&
-            [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-              <CardSkeletonLoader key={index} />
-            ))}
+      <div className="p-3 md:px-6 ">
+        <div className="flex justify-center">
+          <div className="grid  gap-x-2 gap-y-3 xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {loading &&
+              [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+                <CardSkeletonLoader key={index} />
+              ))}
+          </div>
         </div>
         <div className="flex gap-10  justify-center md:justify-start flex-wrap ">
-          <div className="flex  flex-wrap justify-between gap-6">
+          <div className="grid  gap-x-2 gap-y-3 xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {POST?.map((data) => {
               const {
                 createdAt,
@@ -126,7 +128,7 @@ const Cards = ({ query }) => {
                 );
 
               return (
-                <div className="max-w-sm relative  bg-[#125597] border-gray-200 rounded-lg shadow h-fit">
+                <div className="max-w-sm relative  hover:shadow-xl hover:shadow-slate-500 bg-white  rounded-lg shadow h-fit border border-[#e6ebf3]">
                   <Link
                     href={`/profile/user/${userid}`}
                     className="cursor-pointer "
@@ -134,13 +136,13 @@ const Cards = ({ query }) => {
                     <div className="flex items-center p-2 ">
                       <div className="flex-shrink-0">
                         <img
-                          className="w-9 h-9 rounded-full object-center"
+                          className="w-10 h-10 rounded-full object-center border-2"
                           src="/image-1.jpg"
                           alt="Neil image"
                         />
                       </div>
                       <div className="flex-1 min-w-0 ms-4">
-                        <p className="text-xl font-medium dark:text-white capitalize">
+                        <p className="text-xl font-medium tex-[gb(10, 11, 14)] capitalize">
                           {firstName} {lastName}
                         </p>
 
@@ -149,8 +151,8 @@ const Cards = ({ query }) => {
                         </p>
                       </div>
                     </div>
+                    <hr className="" />
                   </Link>
-
                   <Link
                     href={`/post/${id}`}
                     className="cursor-pointer w-full block bg-white"
@@ -162,14 +164,16 @@ const Cards = ({ query }) => {
                       alt
                     />
                   </Link>
-                  <div className="p-5 ">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
-                      {title}
-                    </h5>
-                    <p className="mb-3 font-normal text-white ">
-                      {description}
-                    </p>
-                    <div className="flex  justify-between cursor-pointer ">
+                  <div className="pb-2">
+                    <div className="p-3 ">
+                      <h5 className="mb-2 text-2xl font-bold tracking-tight text-[#202124]">
+                        {title}
+                      </h5>
+                      <p className="mb-3 font-normal text-[#202124] max-h-[50px] overflow-hidden">
+                        {description}
+                      </p>
+                    </div>
+                    <div className="flex  justify-between cursor-pointer border-y py-2  px-5  ">
                       <div className="flex gap-1">
                         <LikeButtton
                           postId={id}
@@ -178,7 +182,7 @@ const Cards = ({ query }) => {
                         />
                       </div>
                       <div className="flex gap-1">
-                        <FaRegComment
+                        <TfiCommentsSmiley
                           size={20}
                           onClick={() => {
                             openModal();
@@ -194,7 +198,7 @@ const Cards = ({ query }) => {
                           setShowShare={setShowShare}
                         />
                         <button onClick={() => setShowShare(!showShare)}>
-                          <FaShare size={20} />
+                          <IoIosSend size={20} />
                         </button>
                       </div>
                     </div>

@@ -1,11 +1,11 @@
 "use client";
 import { useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { format } from "date-fns";
-import { FaRegComment } from "react-icons/fa6";
-import { FaShare } from "react-icons/fa";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
+import { IoIosSend } from "react-icons/io";
+import { TfiCommentsSmiley } from "react-icons/tfi";
 import ResponsiveLayoutWithSidebar from "../../layout/ResponsiveLayoutWithSidebar";
 import Comments from "../../Components/Comments";
 import LikeButtton from "../../Components/LikeButtton";
@@ -63,105 +63,113 @@ const page = ({ params }) => {
       {/*  */}
 
       <div className="p-3 mt-[70px] md:mt-12 md:p-10">
-        {loading &&
-          [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-            <CardSkeletonLoader key={index} />
-          ))}
-        <div className="flex gap-10  justify-center flex-wrap  w-full">
-          <div className="flex  justify-center ">
-            {data?.getSharePost.data.map((data) => {
-              const {
-                createdAt,
-                id,
-                title,
-                description,
-                attachment,
-                commentCount,
-                likeCount,
-                postOwner,
-                likes,
-              } = data;
-              const date = new Date(createdAt);
-              const postCreatedAt = format(date, "d MMM yyyy");
-              const { firstName, lastName, id: userid } = postOwner;
-              const isLikeUser =
-                user_id &&
-                Boolean(
-                  likes &&
-                    likes.find(
-                      (alluserid) => alluserid.toString() == user_id.toString()
-                    )
-                );
+        <div className="flex  justify-center">
+          {loading && [1].map((_, index) => <CardSkeletonLoader key={index} />)}
+        </div>
+        <div className="flex  justify-center ">
+          {data?.getSharePost.data.map((data) => {
+            const {
+              createdAt,
+              _id,
+              title,
+              description,
+              attachment,
+              commentCount,
+              likeCount,
+              postOwner,
+              likes,
+            } = data;
+            const date = new Date(createdAt);
+            const postCreatedAt = format(date, "d MMM yyyy");
+            const { firstName, lastName, id: userid } = postOwner;
+            const isLikeUser =
+              user_id &&
+              Boolean(
+                likes &&
+                  likes.find(
+                    (alluserid) => alluserid.toString() == user_id.toString()
+                  )
+              );
 
-              return (
-                <div className=" relative bg-[#617f9c] border border-gray-200 rounded-lg shadow w-full sm:w-[360px] md:w-[500px] ">
-                  <Link
-                    href={`/profile/user/${userid}`}
-                    className="cursor-pointer "
-                  >
-                    <div className="flex items-center p-2 ">
-                      <div className="flex-shrink-0">
-                        <img
-                          className="w-9 h-9 rounded-full object-center"
-                          src="/image-1.jpg"
-                          alt="Neil image"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0 ms-4">
-                        <p className="text-sm capitalize font-medium text-gray-900 truncate dark:text-white">
-                          {firstName + " " + lastName}
-                        </p>
-                        <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-[2px]">
-                          {postCreatedAt}
-                        </p>
-                      </div>
+            return (
+              <div className="max-w-sm relative  hover:shadow-xl hover:shadow-slate-500 bg-white  rounded-lg shadow h-fit border border-[#e6ebf3]">
+                <Link
+                  href={`/profile/user/${userid}`}
+                  className="cursor-pointer "
+                >
+                  <div className="flex items-center p-2 ">
+                    <div className="flex-shrink-0">
+                      <img
+                        className="w-10 h-10 rounded-full object-center border-2"
+                        src="/image-1.jpg"
+                        alt="Neil image"
+                      />
                     </div>
-                  </Link>
+                    <div className="flex-1 min-w-0 ms-4">
+                      <p className="text-xl font-medium tex-[gb(10, 11, 14)] capitalize">
+                        {firstName} {lastName}
+                      </p>
+
+                      <p className="text-sm text-gray-500 truncate dark:text-gray-400 mt-[2px]">
+                        {postCreatedAt}
+                      </p>
+                    </div>
+                  </div>
+                  <hr className="" />
+                </Link>
+                <Link
+                  href={`/post/${_id}`}
+                  className="cursor-pointer w-full block bg-white"
+                  target="_blank"
+                >
                   <img
-                    className="rounded-t-lg  min-h-[140px] md:min-h-[200px]"
-                    src="/image-1.jpg"
+                    className="rounded-t-lg h-[250px]"
+                    src="image-1.jpg"
+                    alt
                   />
-                  <div className="p-5">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 darks:text-white">
+                </Link>
+                <div className="pb-2">
+                  <div className="p-3 ">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-[#202124]">
                       {title}
                     </h5>
-                    <p className="mb-3 font-normal text-gray-700 darks:text-gray-400">
+                    <p className="mb-3 font-normal text-[#202124] max-h-[50px] overflow-hidden">
                       {description}
                     </p>
-                    <div className="flex  justify-between cursor-pointer">
-                      <div className="flex gap-1">
-                        <LikeButtton
-                          postId={id}
-                          isLikeUser={isLikeUser}
-                          likeCount={likeCount}
-                        />
-                      </div>
-                      <div className="flex gap-1">
-                        <FaRegComment
-                          size={20}
-                          onClick={() => {
-                            openModal();
-                            setPostId(id);
-                          }}
-                        />
-                        {commentCount}{" "}
-                      </div>
-                      <div className="flex gap-1">
-                        <ShareSocailMedial
-                          showShare={showShare}
-                          url={`/post/${id}`}
-                          setShowShare={setShowShare}
-                        />
-                        <button onClick={() => setShowShare(!showShare)}>
-                          <FaShare size={20} />
-                        </button>
-                      </div>
+                  </div>
+                  <div className="flex  justify-between cursor-pointer border-y py-2  px-5  ">
+                    <div className="flex gap-1">
+                      <LikeButtton
+                        postId={_id}
+                        isLikeUser={isLikeUser}
+                        likeCount={likeCount}
+                      />
+                    </div>
+                    <div className="flex gap-1">
+                      <TfiCommentsSmiley
+                        size={20}
+                        onClick={() => {
+                          openModal();
+                          setPostId(_id);
+                        }}
+                      />
+                      {commentCount}{" "}
+                    </div>
+                    <div className="flex gap-1 ">
+                      <ShareSocailMedial
+                        showShare={showShare}
+                        url={`/post/${_id}`}
+                        setShowShare={setShowShare}
+                      />
+                      <button onClick={() => setShowShare(!showShare)}>
+                        <IoIosSend size={20} />
+                      </button>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>

@@ -43,7 +43,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
         />
       </div>
 
-      <div className={`w-full  bg-[#1C4E80] md:fixed z-40 top-0`}>
+      <div className={`w-full  bg-[#f9faf9] md:fixed z-40 top-0`}>
         <div
           onClick={() => dispatch(false)}
           className={`block md:hidden w-full fixed  top-0 bg-[rgba(51,51,51,.5)]  transform h-screen z-30 transition-all ${
@@ -56,7 +56,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
             showSidebar ? " delay-500" : "translate-x-[-100%] "
           } ease-out md:static md:translate-x-0 `}
         >
-          <div className="sidebar  bg-[#1C4E80]  md:bg-transparent  relative ">
+          <div className="sidebar  bg-[#fff]  md:bg-transparent  relative ">
             <div className="h-screen py-8 md:py-0  w-[350px] md:w-full md:h-[80px] bg-none bg-opacity-100 flex flex-col md:flex-row md:justify-between md:items-center px-8 md:px-[64px] ">
               <div className="flex  flex-col md:flex-row md:items-center  h-full justify-between w-full relative">
                 <div className="flex md:block items-center justify-between ">
@@ -74,10 +74,10 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                       <input
                         onChange={(e) => setQuery(e.target.value)}
                         type="text"
-                        className="h-[40px] rounded outline-none text-base pl-2 hidden md:block pr-9"
+                        className="h-[40px] rounded border border-[#e6ebf3] outline-none text-base pl-2 hidden md:block pr-9"
                       />
                       <button className="absolute right-3" type="submit">
-                        <IoSearchSharp size={20} />
+                        <IoSearchSharp size={20}  color="#1a1a1a"/>
                       </button>
                     </form>
                   </div>
@@ -85,7 +85,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                     <IoMdClose
                       size={22}
                       onClick={() => dispatch(false)}
-                      color="#FFFFFF"
+                      color="#1a1a1a"
                       className="block md:hidden"
                     />
                   </div>
@@ -102,7 +102,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                         }`}
                         href={`${href}`}
                       >
-                        {<Icon size={30} title={title} color="white" />}
+                        {<Icon size={30} title={title} color="#1a1a1a" />}
                       </Link>
                     );
                   })}
@@ -115,7 +115,7 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                     router.push("/auth/login");
                   }}
                 >
-                  <TbLogout2 color="white" size={30} />
+                  <TbLogout2 color="#1a1a1a" size={30} />
                 </button>
               </div>
             </div>

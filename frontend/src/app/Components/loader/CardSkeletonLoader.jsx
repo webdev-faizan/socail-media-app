@@ -19,3 +19,4 @@ const CardSkeletonLoader = (props) => (
 );
 
 export default CardSkeletonLoader;
+

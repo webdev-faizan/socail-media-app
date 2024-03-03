@@ -10,7 +10,7 @@ import { CREATE_POST } from "../../app/graphql/mutations/post";
 import { ToastContainer, toast } from "react-toastify";
 
 const fieldIsRequired = "this field is required";
-const schemaSignup = yup.object({
+const schemaCreatePost = yup.object({
   title: yup
     .string()
     .trim()
@@ -62,7 +62,7 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
     setValue,
     formState: { errors },
   } = useForm({
-    // resolver: yupResolver(schemaSignup),
+    resolver: yupResolver(schemaCreatePost),
     mode: "onTouched",
   });
   const [file, setFile] = useState("");
@@ -80,8 +80,8 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
   });
   const useref = useRef();
   const onSubmit = async (data) => {
-    const { atttachment, title, description } = data;
-
+    const { title, description } = data;
+    if (!useref.current.files) return;
     MutationFunction({
       variables: {
         data: {
@@ -104,31 +104,25 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
         contentLabel="Example Modal"
       >
         <div className=" fixed right-0"></div>
-        <FaWindowClose
-          size={30}
-          className="mb-3 ml-auto"
-          onClick={closeModal}
-        />
+        <FaWindowClose size={30} className=" ml-auto" onClick={closeModal} />
         <section>
-          <div className="flex justify-center  h-full px-3">
+          <div className="flex justify-center  h-full px-3 pb-3">
             <div className="w-full xsm:w-[400px]">
-              <div className="py-3">
-                <h6 className="  text-[#1C4E80]  text-[26px] font-medium">
-                  Create a post
-                </h6>
-              </div>
+              <h6 className="  text-black  text-[26px] font-medium">
+                📝 Create a Post
+              </h6>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 encType="multipart/form-data"
               >
                 <div className="flex flex-col gap-3">
                   <div>
-                    {watch("atttachment")?.length > 0 && (
+                    {useref?.current?.files && (
                       <img
                         className="w-full  h-[200px] object-center object-cover"
                         src={
-                          watch("atttachment")?.length > 0 &&
-                          URL.createObjectURL(watch("atttachment")[0])
+                          useref?.current?.files &&
+                          URL.createObjectURL(useref?.current?.files[0])
                         }
                         alt="Selected Image"
                       />
@@ -144,6 +138,7 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                         autoComplete="off"
                         type="file"
                         accept="Image/*"
+                        required
                         ref={useref}
                         onChange={(e) => setFile(e.target.files[0])}
                         // {...register("atttachment")}
@@ -187,10 +182,19 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                     </small>
                   </div>
 
-                  <button
+                  {/* <button
                     type="submit"
                     className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
                   >
+                    Create Post
+                  </button> */}
+                  <button
+                    type="submit"
+                    mode="primary"
+                    rounded="md"
+                    class="w-full  false  bg-blue-500 border-blue-500 text-white hover:border-blue-500 hover:bg-blue-700 border-[1px] flex justify-center items-center px-8 py-2 text-md rounded-md  "
+                  >
+                    {" "}
                     Create Post
                   </button>
                 </div>

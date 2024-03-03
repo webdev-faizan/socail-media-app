@@ -46,8 +46,8 @@ const page = () => {
         showShare={showShare}
         setShowShare={setShowShare}
       />
-      <div className="p-3 mt-[70px] md:mt-4 md:p-10">
-        <div className="flex justify-center my-10 relative">
+      <div className="p-3 mt-[80px] md:mt-[70px]">
+        <div className="flex justify-center my-6 relative">
           <Avatar
             style={{
               border: "2px solid gray",
@@ -94,6 +94,7 @@ const page = () => {
             Share
           </button>
         </div>
+        <br />
 
         <Cards query={GET_USER_POST} />
       </div>

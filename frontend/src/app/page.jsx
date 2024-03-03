@@ -12,7 +12,9 @@ export default function Home() {
   return (
     <ProtectRoutes>
       <ResponsiveLayoutWithSidebar />
-      <Cards query={GET_ALL_POST} />
+      <div className="mt-[80px] md:mt-[80px]">
+        <Cards query={GET_ALL_POST} />
+      </div>
     </ProtectRoutes>
   );
 }
@@ -217,3 +219,4 @@ export default function Home() {
 // // `,
 // //   }),
 // // });
+
