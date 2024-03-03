@@ -1,12 +1,11 @@
 "use client";
-import Avatar from "react-avatar";
-import { ToastContainer, toast } from "react-toastify";
 import { IoIosSend } from "react-icons/io";
 import { TfiCommentsSmiley } from "react-icons/tfi";
 import { format } from "date-fns";
+import Avatar from "react-avatar";
+
 import { useQuery } from "@apollo/client";
 import { GET_VIEW_USER_POST } from "../../../graphql/query/post";
-import ResponsiveLayoutWithSidebar from "../../../layout/ResponsiveLayoutWithSidebar";
 import { GET_VIEW_PERSONAL_INFO } from "../../../graphql/query/profile";
 import ShareSocailMedial from "../../../Components/ShareSocailMedial";
 import { useEffect, useState } from "react";
@@ -14,7 +13,7 @@ import Link from "next/link";
 import LikeButtton from "../../../Components/LikeButtton";
 import Comments from "../../../Components/Comments";
 import CardSkeletonLoader from "../../../Components/loader/CardSkeletonLoader";
-
+import ProtectRoutes from "../../../Components/ProtectRoutes";
 const Page = ({ params }) => {
   const user_id = params.id[0];
   const { data: userInfo } = useQuery(GET_VIEW_PERSONAL_INFO, {
@@ -81,7 +80,6 @@ const Page = ({ params }) => {
   if (foundPost) {
     return (
       <>
-        <ResponsiveLayoutWithSidebar />
         <div className="h-screen  text-5xl font-semibold text-center justify-center flex items-center w-screen sm:text-6xl">
           No found. 😇😇
         </div>
@@ -89,9 +87,7 @@ const Page = ({ params }) => {
     );
   }
   return (
-    <>
-      <ToastContainer />
-      <ResponsiveLayoutWithSidebar />
+    <ProtectRoutes>
       <Comments
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
@@ -249,7 +245,7 @@ const Page = ({ params }) => {
           </div>
         </div>
       </div>
-    </>
+    </ProtectRoutes>
   );
 };
 

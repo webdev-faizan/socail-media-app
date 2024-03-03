@@ -7,10 +7,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { useMutation, useQuery } from "@apollo/client";
 import { PROFILE_CHANGE } from "../graphql/mutations/profile";
 import { GET_USER_POST } from "../graphql/query/post";
-import ResponsiveLayoutWithSidebar from "../layout/ResponsiveLayoutWithSidebar";
 import { GET_USER_PERSONAL_INFO } from "../graphql/query/profile";
 import Cards from "../Components/Cards";
 import ShareSocailMedial from "../Components/ShareSocailMedial";
+import ProtectRoutes from "../Components/ProtectRoutes";
 
 const page = () => {
   const { data, refetch } = useQuery(GET_USER_PERSONAL_INFO);
@@ -38,9 +38,8 @@ const page = () => {
     });
   };
   return (
-    <>
+    <ProtectRoutes>
       <ToastContainer />
-      <ResponsiveLayoutWithSidebar />
       <ShareSocailMedial
         url={`/user/${_id}`}
         showShare={showShare}
@@ -98,7 +97,7 @@ const page = () => {
 
         <Cards query={GET_USER_POST} />
       </div>
-    </>
+    </ProtectRoutes>
   );
 };
 

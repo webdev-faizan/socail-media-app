@@ -11,7 +11,7 @@ import CreatePostModal from "../Components/CreatePostModal";
 import { deleteCookie } from "cookies-next";
 import { GrMenu } from "react-icons/gr";
 
-const NavigationNav = () => {
+const Navigations = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const path = usePathname();
   const router = useRouter();
@@ -159,4 +159,4 @@ const NavigationNav = () => {
   );
 };
 
-export default NavigationNav;
+export default Navigations;

@@ -4,7 +4,7 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaRegFaceFlushed } from "react-icons/fa6";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
-import RegistrationModal from "../../modal/RegistrationModal";
+import RegistrationModal from "../../modal/RegistrationSuccessModal";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -280,12 +280,16 @@ const signup = () => {
                     {errors.tac?.message}
                   </small>
                 </div>
+
                 <button
-                  disabled={loading}
                   type="submit"
-                  className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
+                  mode="primary"
+                  rounded="md"
+                  class="w-full  false  bg-blue-500 border-blue-500 text-white hover:border-blue-500 hover:bg-blue-700 border-[1px] flex justify-center items-center px-8 py-2 text-md rounded-md  "
                 >
-                  {loading ? "loading..." : "submit"}
+                  {" "}
+                  Login
+                  {loading ? "loading..." : "Signup"}
                 </button>
               </div>
               <small className="text-sm text-gray-600 mt-3 block">

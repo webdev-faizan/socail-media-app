@@ -1,17 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import ResponsiveLayoutWithSidebar from "./layout/ResponsiveLayoutWithSidebar";
-import { useQuery } from "@apollo/client";
 import { GET_ALL_POST } from "./graphql/query/post";
 import Cards from "./Components/Cards";
-import ShareSocailMedial from "./Components/ShareSocailMedial";
-import CardSkeletonLoader from "./Components/loader/CardSkeletonLoader";
 import ProtectRoutes from "./Components/ProtectRoutes";
 export default function Home() {
   return (
     <ProtectRoutes>
-      <ResponsiveLayoutWithSidebar />
       <div className="mt-[80px] md:mt-[80px]">
         <Cards query={GET_ALL_POST} />
       </div>
@@ -219,4 +213,3 @@ export default function Home() {
 // // `,
 // //   }),
 // // });
-

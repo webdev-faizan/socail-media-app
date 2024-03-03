@@ -9,6 +9,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { GET_COMMENTS } from "../graphql/query/post";
 import { formatDistanceToNow } from "date-fns";
 import { useLazyQuery } from "@apollo/client";
+import Avatar from "react-avatar";
 
 const Comments = ({ modalIsOpen, closeModal, postId }) => {
   const [comment, setComments] = useState("");
@@ -109,15 +110,21 @@ const Comments = ({ modalIsOpen, closeModal, postId }) => {
                     className="flex p-2 mt-5 border-b border-gray-200 "
                   >
                     <div className="flex-shrink-0">
-                      <img
-                        className="w-8 h-8 rounded-full object-center"
-                        src="/image-1.jpg"
-                        alt={`${firstName} ${lastName}'s Profile Picture`}
+                      <Avatar
+                        style={{
+                          border: "2px solid gray",
+                        }}
+                        // src={`${profile}`}
+                        name={`${firstName ? firstName + " " : ""}${
+                          lastName ? lastName : ""
+                        }`}
+                        size={40}
+                        round={true}
                       />
                     </div>
                     <div className="flex-1 min-w-0 ms-4">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-gray-900 capitalize">
                           {firstName} {lastName}
                         </p>
                         <p className="text-base text-black">{CreatedAt}</p>
@@ -148,7 +155,7 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    background: "#617f9c",
+    background: "white",
     transform: "translate(-50%, -50%)",
     height: "100vh",
     // overflowY: "hidden",

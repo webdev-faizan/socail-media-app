@@ -1,13 +1,19 @@
 "use client";
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../provider/withSessionCheck";
+import Navigations from "../layout/Navigations";
 const ProtectRoutes = ({ children }) => {
   const { isAuthenticated, token } = useContext(AuthContext);
   const router = useRouter();
   if (hasCookie("auth") && isAuthenticated && getCookie("auth") == token) {
-    return <>{children}</>;
+    return (
+      <>
+        <Navigations />
+        {children}
+      </>
+    );
   } else {
     deleteCookie("auth");
     deleteCookie("user_id");

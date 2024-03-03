@@ -27,6 +27,10 @@ const AuthProvider = ({ children }) => {
     } else if (getCookie("auth") != undefined) {
       checkUserStatus();
     }
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, [getCookie("auth")]);
 
   return (

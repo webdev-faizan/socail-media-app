@@ -5,13 +5,11 @@ import React, { useEffect } from "react";
 
 const RequireGuest = ({ children }) => {
   const router = useRouter();
-  useEffect(() => {
-    if (hasCookie("auth", { path: "/" })) {
-      router.push("/");
-    }
-  }, []);
-
-  return <>{children}</>;
+  if (hasCookie("auth", { path: "/" })) {
+    router.push("/");
+  } else {
+    return <>{children}</>;
+  }
 };
 
 export default RequireGuest;

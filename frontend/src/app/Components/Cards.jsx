@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useQuery } from "@apollo/client";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
+import Avatar from "react-avatar";
 import LikeButtton from "./LikeButtton";
 import Comments from "./Comments";
 import ShareSocailMedial from "./ShareSocailMedial";
@@ -19,7 +20,6 @@ const Cards = ({ query }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [showShare, setShowShare] = useState(false);
-  const [isSerachUser, setSerachUser] = useState(false);
   const [foundPost, setFoundpost] = useState(false);
   function openModal() {
     setIsOpen(true);
@@ -135,10 +135,16 @@ const Cards = ({ query }) => {
                   >
                     <div className="flex items-center p-2 ">
                       <div className="flex-shrink-0">
-                        <img
-                          className="w-10 h-10 rounded-full object-center border-2"
-                          src="/image-1.jpg"
-                          alt="Neil image"
+                        <Avatar
+                          style={{
+                            border: "2px solid gray",
+                          }}
+                          // src={`${profile}`}
+                          name={`${firstName ? firstName + " " : ""}${
+                            lastName ? lastName : ""
+                          }`}
+                          size={40}
+                          round={true}
                         />
                       </div>
                       <div className="flex-1 min-w-0 ms-4">

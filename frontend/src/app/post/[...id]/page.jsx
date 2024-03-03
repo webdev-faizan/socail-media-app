@@ -1,17 +1,19 @@
 "use client";
 import { useQuery } from "@apollo/client";
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
+import Avatar from "react-avatar";
+
 import { IoIosSend } from "react-icons/io";
 import { TfiCommentsSmiley } from "react-icons/tfi";
-import ResponsiveLayoutWithSidebar from "../../layout/ResponsiveLayoutWithSidebar";
 import Comments from "../../Components/Comments";
 import LikeButtton from "../../Components/LikeButtton";
 import { GET_SHARE_POST } from "../../graphql/query/post";
 import ShareSocailMedial from "../../Components/ShareSocailMedial";
 import CardSkeletonLoader from "../../Components/loader/CardSkeletonLoader";
+import ProtectRoutes from "../../Components/ProtectRoutes";
 const user_id = getCookie("user_id");
 
 const page = ({ params }) => {
@@ -44,8 +46,6 @@ const page = ({ params }) => {
   if (foundPost) {
     return (
       <>
-        <ResponsiveLayoutWithSidebar />
-
         <div className="h-screen  text-5xl font-semibold text-center justify-center flex items-center w-screen sm:text-6xl">
           No posts found. 😇😇
         </div>
@@ -53,14 +53,12 @@ const page = ({ params }) => {
     );
   }
   return (
-    <>
-      <ResponsiveLayoutWithSidebar />
+    <ProtectRoutes>
       <Comments
         modalIsOpen={modalIsOpen}
         closeModal={closeModal}
         postId={postId}
       />
-      {/*  */}
 
       <div className="p-3 mt-[70px] md:mt-12 md:p-10">
         <div className="flex  justify-center">
@@ -99,10 +97,16 @@ const page = ({ params }) => {
                 >
                   <div className="flex items-center p-2 ">
                     <div className="flex-shrink-0">
-                      <img
-                        className="w-10 h-10 rounded-full object-center border-2"
-                        src="/image-1.jpg"
-                        alt="Neil image"
+                      <Avatar
+                        style={{
+                          border: "2px solid gray",
+                        }}
+                        // src={`${profile}`}
+                        name={`${firstName ? firstName + " " : ""}${
+                          lastName ? lastName : ""
+                        }`}
+                        size={40}
+                        round={true}
                       />
                     </div>
                     <div className="flex-1 min-w-0 ms-4">
@@ -172,7 +176,7 @@ const page = ({ params }) => {
           })}
         </div>
       </div>
-    </>
+    </ProtectRoutes>
   );
 };
 

@@ -176,10 +176,13 @@ const signup = () => {
                 </div>
                 <button
                   type="submit"
+                  mode="primary"
+                  rounded="md"
                   disabled={loading}
-                  className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
+                  class="w-full  false  bg-blue-500 border-blue-500 text-white hover:border-blue-500 hover:bg-blue-700 border-[1px] flex justify-center items-center px-8 py-2 text-md rounded-md  "
                 >
-                  {loading ? "loading..." : "submit"}
+                  {" "}
+                  {loading ? "loading..." : "Login"}
                 </button>
               </div>
               <small className="text-sm text-gray-600 mt-3 block">

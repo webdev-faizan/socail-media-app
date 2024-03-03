@@ -23,18 +23,18 @@ const schemaCreatePost = yup.object({
     .required(fieldIsRequired)
     .min(10, "min length must be at least 20 characters")
     .max(50, " the description to less than 20 characters."),
-  atttachment: yup
-    .mixed()
-    .required(fieldIsRequired)
-    .test("fileSize", "File size must be less than 5MB", (value) => {
-      if (!value) return false;
-      const file = value[0];
-      return file.size <= 1 * 1024 * 1024;
-    })
-    .test("fileType", "Invalid file type. Only images are allowed", (value) => {
-      if (!value) return true;
-      return value[0].type.startsWith("image/");
-    }),
+  // atttachment: yup
+  //   .mixed()
+  //   .required(fieldIsRequired)
+  //   .test("fileSize", "File size must be less than 5MB", (value) => {
+  //     if (!value) return false;
+  //     const file = value[0];
+  //     return file.size <= 1 * 1024 * 1024;
+  //   })
+  //   .test("fileType", "Invalid file type. Only images are allowed", (value) => {
+  //     if (!value) return true;
+  //     return value[0].type.startsWith("image/");
+  //   }),
 });
 
 const customStyles = {
@@ -58,15 +58,12 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaCreatePost),
     mode: "onTouched",
   });
-  const [file, setFile] = useState("");
-
   const [MutationFunction, { loading }] = useMutation(CREATE_POST, {
     fetchPolicy: "no-cache",
     onCompleted: ({ createPost }) => {
@@ -89,6 +86,15 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
           title,
           description,
         },
+      },
+      onCompleted: () => {
+        reset();
+        useref.current.destroy();
+      },
+      onError: ({ createPost }) => {
+        toast.error(createPost.message, {
+          autoClose: 1000,
+        });
       },
     });
   };
@@ -121,14 +127,17 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                       <img
                         className="w-full  h-[200px] object-center object-cover"
                         src={
-                          useref?.current?.files &&
-                          URL.createObjectURL(useref?.current?.files[0])
+                          useref &&
+                          useref.current &&
+                          useref.current.files &&
+                          useref.current.files[0]
+                            ? URL.createObjectURL(useref.current.files[0])
+                            : ""
                         }
                         alt="Selected Image"
                       />
                     )}
                   </div>
-
                   <div className="flex flex-col gap-2 ">
                     <label htmlFor="" className="text-[#36454F] ">
                       Choose Image<span className="text-[#E60A0A]"> *</span>{" "}
@@ -140,7 +149,6 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                         accept="Image/*"
                         required
                         ref={useref}
-                        onChange={(e) => setFile(e.target.files[0])}
                         // {...register("atttachment")}
                         className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] flex items-center p-[2px] border-[#D0D3E8] border-solid outline-none"
                         placeholder="Title"
@@ -182,20 +190,15 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                     </small>
                   </div>
 
-                  {/* <button
-                    type="submit"
-                    className="bg-[#1C4E80] min-h-[46px] rounded-3xl text-white w-full "
-                  >
-                    Create Post
-                  </button> */}
                   <button
                     type="submit"
                     mode="primary"
                     rounded="md"
+                    disabled={loading}
                     class="w-full  false  bg-blue-500 border-blue-500 text-white hover:border-blue-500 hover:bg-blue-700 border-[1px] flex justify-center items-center px-8 py-2 text-md rounded-md  "
                   >
                     {" "}
-                    Create Post
+                    {loading ? "Creating post..." : "Create Post"}
                   </button>
                 </div>
               </form>
