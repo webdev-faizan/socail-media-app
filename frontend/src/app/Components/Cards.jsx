@@ -78,7 +78,7 @@ const Cards = ({ query }) => {
   if (foundPost) {
     return (
       <>
-        <div className="h-screen  text-5xl font-semibold text-center justify-center flex items-center w-screen sm:text-6xl">
+        <div className="h-screen text-3xl overflow-clip md:text-5xl font-semibold text-center justify-center flex items-center w-full sm:text-6xl">
           No posts found. 😇😇
         </div>
       </>

@@ -9,8 +9,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TbLogout2 } from "react-icons/tb";
 import CreatePostModal from "../Components/CreatePostModal";
 import { deleteCookie } from "cookies-next";
+import { GrMenu } from "react-icons/gr";
 
-const NavigationNav = ({ showSidebar, dispatch }) => {
+const NavigationNav = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
   const path = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -42,10 +44,41 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
           closeModal={closeModal}
         />
       </div>
+      {/* top bar */}
+      <div className={`w-full fixed top-0 z-40`}>
+        <div className="flex md:hidden overflow-clip px-4  z-40 top-0 h-[65px] w-full bg-[#fff]  justify-between items-center gap-y-3 md:px-8">
+          <img
+            src="/logo.png"
+            alt="logo"
+            className="rounded-md py-2 px-1 object-cover h-[50px]"
+          />
+          <form
+            action=""
+            onSubmit={handleClick}
+            className="relative flex items-center bg-red-700"
+          >
+            <input
+              onChange={(e) => setQuery(e.target.value)}
+              type="text"
+              className="h-[40px]  rounded border border-[#e6ebf3] outline-none text-base pl-2 block md:hidden pr-9"
+              style={{width:"calc(100vw - 150px)"}}
+            />
+            <button className="absolute right-3" type="submit">
+              <IoSearchSharp size={20} color="#1a1a1a" />
+            </button>
+          </form>
 
+          <button
+            className="cursor-pointer"
+            onClick={() => setShowSidebar(() => true)}
+          >
+            <GrMenu size={24} color="#1a1a1a" />
+          </button>
+        </div>
+      </div>
       <div className={`w-full  bg-[#f9faf9] md:fixed z-40 top-0`}>
         <div
-          onClick={() => dispatch(false)}
+          onClick={() => setShowSidebar(false)}
           className={`block md:hidden w-full fixed  top-0 bg-[rgba(51,51,51,.5)]  transform h-screen z-30 transition-all ${
             showSidebar ? "translate-x-0 " : "-translate-x-full delay-500"
           } ease-out`}
@@ -77,14 +110,14 @@ const NavigationNav = ({ showSidebar, dispatch }) => {
                         className="h-[40px] rounded border border-[#e6ebf3] outline-none text-base pl-2 hidden md:block pr-9"
                       />
                       <button className="absolute right-3" type="submit">
-                        <IoSearchSharp size={20}  color="#1a1a1a"/>
+                        <IoSearchSharp size={20} color="#1a1a1a" />
                       </button>
                     </form>
                   </div>
                   <div className="block md:hidden">
                     <IoMdClose
                       size={22}
-                      onClick={() => dispatch(false)}
+                      onClick={() => setShowSidebar(false)}
                       color="#1a1a1a"
                       className="block md:hidden"
                     />
