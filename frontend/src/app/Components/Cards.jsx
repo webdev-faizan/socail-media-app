@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import { useQuery } from "@apollo/client";
 import { getCookie } from "cookies-next";
@@ -18,7 +18,7 @@ const Cards = ({ query }) => {
   const searchParams = useSearchParams();
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [page, setPage] = useState(1);
+  const ref = useRef(2);
   const [showShare, setShowShare] = useState(false);
   const [foundPost, setFoundpost] = useState(false);
   function openModal() {
@@ -29,8 +29,8 @@ const Cards = ({ query }) => {
   }
   const { loading, data, fetchMore } = useQuery(query, {
     variables: {
-      page: 1,
-      limit: 10,
+      pageNo: 1,
+      limit: 3,
       ...(window.location.pathname == "/" && {
         query: searchParams.get("query"),
       }),
@@ -45,22 +45,25 @@ const Cards = ({ query }) => {
       setFoundpost(false);
     },
   });
+  console.log(loading);
   const handleScroll = () => {
     if (
-      window.pageYOffset + window.innerHeight >=
+      window.pageYOffset + window.innerHeight + 5 >
       document.documentElement.scrollHeight
     ) {
-      setPage(page + 1);
       fetchMore({
         variables: {
-          limit: 10,
-          page: page,
+          limit: 3,
+          pageNo: ref.current,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
-          return {
-            ...prev,
-            ...fetchMoreResult,
-          };
+          if (fetchMoreResult.getAllPost.data.length > 0) {
+            ref.current += 1;
+            return {
+              ...prev,
+              ...fetchMoreResult,
+            };
+          }
         },
       });
     }
@@ -72,7 +75,7 @@ const Cards = ({ query }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [data, fetchMore]);
+  }, []);
 
   const POST = data?.getAllPost?.data || data?.getUserPost?.data;
   if (foundPost) {
@@ -93,14 +96,6 @@ const Cards = ({ query }) => {
         postId={postId}
       />
       <div className="p-3 md:px-6 ">
-        <div className="flex justify-center">
-          <div className="grid  gap-x-2 gap-y-3 xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {loading &&
-              [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
-                <CardSkeletonLoader key={index} />
-              ))}
-          </div>
-        </div>
         <div className="flex gap-10  justify-center md:justify-start flex-wrap ">
           <div className="grid  gap-x-2 gap-y-3 xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {POST?.map((data) => {
@@ -212,6 +207,14 @@ const Cards = ({ query }) => {
                 </div>
               );
             })}
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="grid  gap-x-2 gap-y-3 xsm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {loading &&
+              [1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
+                <CardSkeletonLoader key={index} />
+              ))}
           </div>
         </div>
       </div>

@@ -8,10 +8,7 @@
   height: 300px;
   padding: 10px 20px;
 }
-.Toastify {
-  position: absolute;
-  z-index: -999999;
-}
+
 .body {
-  background-color: #f7f4f4;
+  /* background-color: #f7f4f4; */
 }

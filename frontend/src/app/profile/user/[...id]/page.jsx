@@ -36,7 +36,7 @@ const Page = ({ params }) => {
   }
   const { data, fetchMore, loading } = useQuery(GET_VIEW_USER_POST, {
     variables: {
-      page: 10,
+      pageNo: 1,
       limit: 1,
       id: user_id,
     },
@@ -58,7 +58,7 @@ const Page = ({ params }) => {
         variables: {
           id: user_id,
           limit: 10,
-          page: page,
+          pageNo: page,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           return {

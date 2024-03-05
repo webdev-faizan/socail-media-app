@@ -91,10 +91,12 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
         reset();
         useref.current.destroy();
       },
-      onError: ({ createPost }) => {
-        toast.error(createPost.message, {
-          autoClose: 1000,
-        });
+      onError: ({ networkError }) => {
+        if (networkError) {
+          toast.error(networkError.result.errors[0].message, {
+            autoClose: 1500,
+          });
+        }
       },
     });
   };

@@ -69,8 +69,12 @@ const signup = () => {
 
   const [mutateFunction, { loading, reset }] = useMutation(SIGNUP_USER, {
     fetchPolicy: "no-cache",
-    onError: ({ message }) => {
-      toast.error(message);
+    onError: ({ networkError }) => {
+      if (networkError) {
+        toast.error(networkError.result.errors[0].message, {
+          autoClose: 1500,
+        });
+      }
     },
     onCompleted: () => {
       setShowModal(true);

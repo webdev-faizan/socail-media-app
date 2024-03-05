@@ -41,8 +41,12 @@ const forgetPassword = () => {
       reset();
       router.push("auth/login");
     },
-    onError: ({ message }) => {
-      toast.error(message);
+    onError: ({ networkError }) => {
+      if (networkError) {
+        toast.error(networkError.result.errors[0].message, {
+          autoClose: 1500,
+        });
+      }
     },
   });
 

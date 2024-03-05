@@ -44,7 +44,7 @@ export const getAllPostTypeDefs = `
 scalar Date
 
 type Query {
-  getAllPost(page: Int, limit: Int,query:String): GetUserPostResponse
+  getAllPost(page: Int!, limit: Int,query:String): GetUserPostResponse
   }
   
   type PostInfo {

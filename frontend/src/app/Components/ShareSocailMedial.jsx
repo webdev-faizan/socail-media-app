@@ -13,9 +13,9 @@ const ShareSocailMedial = ({ showShare, setShowShare, url }) => {
       style={customStyles}
       contentLabel="Example Modal"
     >
-      <div className="w-[560px]  ">
+      <div className="w-[95vw] sm:w-[560px]  ">
         <ShareSocial
-          url={window&&window.location.origin + url}
+          url={window && window.location.origin + url}
           style={style}
           socialTypes={["facebook", "twitter", "linkedin", "reddit"]}
         />

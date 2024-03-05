@@ -68,7 +68,7 @@ const page = ({ params }) => {
           {data?.getSharePost.data.map((data) => {
             const {
               createdAt,
-              _id,
+              id,
               title,
               description,
               attachment,
@@ -90,7 +90,10 @@ const page = ({ params }) => {
               );
 
             return (
-              <div className="max-w-sm relative  hover:shadow-xl hover:shadow-slate-500 bg-white  rounded-lg shadow h-fit border border-[#e6ebf3]">
+              <div
+                className="w-full sm:w-[500px] relative  hover:shadow-xl hover:shadow-slate-500 bg-white  rounded-lg shadow h-fit border border-[#e6ebf3]"
+                key={id}
+              >
                 <Link
                   href={`/profile/user/${userid}`}
                   className="cursor-pointer "
@@ -122,7 +125,7 @@ const page = ({ params }) => {
                   <hr className="" />
                 </Link>
                 <Link
-                  href={`/post/${_id}`}
+                  href={`/post/${id}`}
                   className="cursor-pointer w-full block bg-white"
                   target="_blank"
                 >
@@ -144,7 +147,7 @@ const page = ({ params }) => {
                   <div className="flex  justify-between cursor-pointer border-y py-2  px-5  ">
                     <div className="flex gap-1">
                       <LikeButtton
-                        postId={_id}
+                        postId={id}
                         isLikeUser={isLikeUser}
                         likeCount={likeCount}
                       />
@@ -154,7 +157,7 @@ const page = ({ params }) => {
                         size={20}
                         onClick={() => {
                           openModal();
-                          setPostId(_id);
+                          setPostId(id);
                         }}
                       />
                       {commentCount}{" "}
@@ -162,7 +165,7 @@ const page = ({ params }) => {
                     <div className="flex gap-1 ">
                       <ShareSocailMedial
                         showShare={showShare}
-                        url={`/post/${_id}`}
+                        url={`/post/${id}`}
                         setShowShare={setShowShare}
                       />
                       <button onClick={() => setShowShare(!showShare)}>

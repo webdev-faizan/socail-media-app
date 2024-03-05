@@ -18,8 +18,6 @@ export const getAllPostsResolver = async (
       },
     })
   }
-  console.log('query', query)
-
   const pageSize = parseInt(limit)
   const pageNo = parseInt(page) || 1
   const validPage = pageNo > 1 ? pageNo : 1

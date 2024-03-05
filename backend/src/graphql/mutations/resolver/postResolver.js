@@ -11,7 +11,7 @@ export const createPostResolver = async (_, { postInfo }, context) => {
       extensions: {
         code: 'BAD_REQUEST',
         http: {
-          status: 400,
+          status: 401,
         },
       },
     })

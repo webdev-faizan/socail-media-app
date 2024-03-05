@@ -9,7 +9,7 @@ import RequireGuest from "../../Components/RequireGuest";
 import { toast, ToastContainer } from "react-toastify";
 const EmailVerificationComponent = () => {
   const searchParams = useSearchParams();
-  const router=useRouter()
+  const router = useRouter();
   const [mutateFunction, { loading }] = useMutation(VERIFY_EMAIL, {
     fetchPolicy: "no-cache",
     onCompleted: ({ emailVerification }) => {
@@ -18,10 +18,12 @@ const EmailVerificationComponent = () => {
       });
       router.push("/auth/login");
     },
-    onError: ({ message }) => {
-      toast.error(message, {
-        autoClose: 1500,
-      });
+    onError: ({ networkError }) => {
+      if (networkError) {
+        toast.error(networkError.result.errors[0].message, {
+          autoClose: 1500,
+        });
+      }
     },
   });
   const VerifyEmail = async () => {

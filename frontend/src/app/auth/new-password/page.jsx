@@ -33,8 +33,7 @@ const schemaSignup = yup.object({
 const Newpassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
-  const router=useRouter()
-
+  const router = useRouter();
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -59,10 +58,12 @@ const Newpassword = () => {
 
       router.push("/auth/login");
     },
-    onError: ({ message }) => {
-      toast.error(message, {
-        autoClose: 1500,
-      });
+    onError: ({ networkError }) => {
+      if (networkError) {
+        toast.error(networkError.result.errors[0].message, {
+          autoClose: 1500,
+        });
+      }
     },
   });
   const onSubmit = ({ password }) => {

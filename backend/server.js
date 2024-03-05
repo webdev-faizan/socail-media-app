@@ -29,9 +29,19 @@ mongoose
   .catch((error) => {
     console.error('Failed to establish a connection to the database', error)
   })
-console.log(process.env.URI)
 
 async function StartServer() {
+  const setHttpPlugin = {
+    async requestDidStart() {
+      return {
+        async willSendResponse({ response }) {
+          if (response?.errors) {
+            response.http.status = response?.errors[0]?.status
+          }
+        },
+      }
+    },
+  }
   const app = express()
 
   const PORT = process.env.PORT || 3002
@@ -43,53 +53,6 @@ async function StartServer() {
     context: async ({ req }) => {
       return req
     },
-    // context: async ({ req }) => {
-    //   const operationName = req.body.query.split('{', 2)[1].split('(')[0].trim()
-    //   if (
-    //     operationName === 'signupUser' ||
-    //     operationName === 'emailVerification' ||
-    //     operationName === 'loginUser' ||
-    //     operationName === 'forgetPassword' ||
-    //     operationName === 'newPassword'
-    //   ) {
-    //     throw new GraphQLError('Session is Expired', {
-    //       code: 'BAD_REQUEST',
-    //       http: {
-    //         status: 400,
-    //       },
-    //     })
-    //   }
-    //   if (req.headers.authorization) {
-    //     const { error, success, tokenInfo } = await JwtTokenDecode()
-    //     if (success && tokenInfo) {
-    //       const token = req.headers.authorization.split(' ')[1]
-    //       const { id, iat } = tokenInfo
-    //       const existing_user = await userModel
-    //         .findById(id)
-    //         .select('_id lastPasswordChangeAt')
-    //       if (existing_user && existing_user.lastPasswordChangeAt > iat) {
-    //         req.user = existing_user.id
-    //         return { user: existing_user.id }
-    //       } else {
-    //         throw new GraphQLError('Session is Expired', {
-    //           code: 'BAD_REQUEST',
-    //           http: {
-    //             status: 400,
-    //           },
-    //         })
-    //       }
-    //     } else {
-    //       throw new GraphQLError('Session is Expired', {
-    //         code: 'BAD_REQUEST',
-    //         http: {
-    //           status: 400,
-    //         },
-    //       })
-    //     }
-    //   } else {
-    //     return {}
-    //   }
-    // },
     formatError: (err) => {
       console.log(err)
       return {
@@ -98,7 +61,7 @@ async function StartServer() {
         code: err.extensions.code || 'INTERNAL_SERVER_ERROR',
       }
     },
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground, setHttpPlugin],
   })
   //! middleware
   //* Middleware to parse JSON requests with a limit of 10MB
@@ -127,17 +90,6 @@ async function StartServer() {
   app.use(graphqlUploadExpress())
   await Server.start()
   Server.applyMiddleware({ app, path: '/graphql' })
-
-  //* Middleware to sanitize user input for preventing Cross-Site Scripting (XSS) attacks
-
-  app.get('/test', (req, res) => {
-    // Simulate user input from a query parameter
-    const userInput = req.query.input || ''
-    console.log(req.query)
-
-    // Reflect sanitized user input in the response
-    res.send(`<p>${userInput}</p>`)
-  })
   app.listen(PORT, () => {
     console.log(`🚀 Server ready at ${PORT}`)
   })

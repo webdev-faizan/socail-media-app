@@ -37,13 +37,15 @@ const signup = () => {
     resolver: yupResolver(schemaSignup),
     mode: "onTouched",
   });
-  const [mutationFunction, { loading }] = useMutation(LOGIN_USER, {
+  const [mutationFunction, { loading, error }] = useMutation(LOGIN_USER, {
     fetchPolicy: "no-cache",
 
-    onError: ({ message }) => {
-      toast.error(message, {
-        autoClose: 1500,
-      });
+    onError: ({ networkError }) => {
+      if (networkError) {
+        toast.error(networkError.result.errors[0].message, {
+          autoClose: 1500,
+        });
+      }
     },
     onCompleted: ({ loginUser }) => {
       const expires = new Date(Date.now() + 10 + 24 * 60 * 60 * 1000 + 100);
