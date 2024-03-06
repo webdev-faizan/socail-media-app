@@ -24,20 +24,8 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach(({ message }) => {
-      console.error(`[GraphQL error]: ${message}`);
-      // Here you can display the error message using any UI component like toast
-    });
-  }
-  if (networkError) {
-    console.error(`[Network error]: ${networkError}`);
-    // Handle network errors if needed
-  }
-});
 const client = new ApolloClient({
-  link: concat(authLink, uploadLink, httpLink, errorLink),
+  link: concat(authLink, uploadLink, httpLink),
   cache: new InMemoryCache(),
 });
 

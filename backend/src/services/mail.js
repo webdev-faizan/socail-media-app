@@ -18,8 +18,6 @@ const sendNodemailerMail = async ({
   text,
 }) => {
   try {
-    console.log(process.env.MAIL_PASSWORD)
-
     const mailOptions = {
       from: process.env.USERNAME,
       to: to,

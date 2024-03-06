@@ -7,10 +7,9 @@ import sendNodemailerMail from '../../../services/mail.js'
 import VerifedEmailMail from '../../../templates/mail/VerifedEmailMail.js'
 import ResetPasswordMail from '../../../templates/mail/ResetPasswordMail.js'
 import bcrypt from 'bcryptjs'
-const SignupUser = async (_, userInfo) => {
+const SignupUser = async (_, userInfo, context) => {
   const { firstName, lastName, email, password, tac } =
     userInfo.registerationForm
-  console.log(userInfo.registerationForm)
   const isAlreadyUserRegister = await userModel.findOne({ email })
   if (isAlreadyUserRegister) {
     if (isAlreadyUserRegister) {
@@ -38,10 +37,8 @@ const SignupUser = async (_, userInfo) => {
     const token = await JwtTokenGenerator(this_user._id, expiresIn)
     const link = `${process.env.BASE_URL}/auth/verify-email?token=${token}`
     const html = VerifedEmailMail(firstName + ' ' + lastName || '', link)
-    console.log(link)
-
     // await sendNodemailerMail({ to: email, subject: 'Email Verified', html })
-
+    context.status = 2001
     return {
       ...this_user.toObject(),
       message: 'User successfully registered!',
@@ -183,7 +180,6 @@ export const forgetPassword = async (_, { email }) => {
     const token = await is_user_register.PasswordResetToken()
     await is_user_register.save()
     const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
-    console.log(link)
     const html = ResetPasswordMail(link, is_user_register.firstName)
     // await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
     return {

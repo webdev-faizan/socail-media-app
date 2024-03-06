@@ -20,7 +20,6 @@ const LikeButton = ({ postId, isLikeUser, likeCount }) => {
     },
   });
   const handleLikeClick = async () => {
-    console.log("handle clike");
     if (liked.liked) {
       setLiked((prev) => {
         return {

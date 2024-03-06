@@ -73,7 +73,6 @@ userSchema.methods.correctPassword = function (
 userSchema.methods.PasswordResetToken = async function () {
   this.passwordResetExpires = (await Date.now()) + 10 * 60 * 1000
   const resetToken = await crypto.randomBytes(32).toString('hex')
-  console.log(resetToken)
   this.passwordResetToken = await crypto
     .createHash('sha256')
     .update(`${resetToken}`)

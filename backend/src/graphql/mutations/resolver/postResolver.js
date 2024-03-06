@@ -36,6 +36,7 @@ export const createPostResolver = async (_, { postInfo }, context) => {
       description,
       attachment: url,
     }).save()
+    context.status = 2001
     return {
       atttachment: url,
       message: 'Post Successfully Created',
@@ -63,6 +64,8 @@ export const CommentResolver = async (_, { createComment }, context) => {
   await PostModel.findByIdAndUpdate(postId, {
     $inc: { commentCount: 1 },
   })
+  context.status = 2001
+
   return {
     message: 'Comment added successfully',
   }

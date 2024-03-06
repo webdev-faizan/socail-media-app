@@ -104,7 +104,6 @@ const signup = () => {
         },
       });
     } catch (error) {
-      console.log(error);
     }
   };
   return (

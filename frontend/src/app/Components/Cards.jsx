@@ -45,7 +45,6 @@ const Cards = ({ query }) => {
       setFoundpost(false);
     },
   });
-  console.log(loading);
   const handleScroll = () => {
     if (
       window.pageYOffset + window.innerHeight + 5 >

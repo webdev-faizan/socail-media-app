@@ -1,6 +1,6 @@
 import { JwtTokenDecode } from '../lib/jwt.js'
 import userModel from '../model/userModel.js'
-const ProtectRoutes = async (req) => {
+const ProtectRoutes = async ({req}) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(' ')[1]
     const { error, success, tokenInfo } = JwtTokenDecode(token)

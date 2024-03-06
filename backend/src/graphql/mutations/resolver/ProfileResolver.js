@@ -53,8 +53,6 @@ export const getUserPersonalInfoResolver = async (_, $, context) => {
   const user = await userModel
     .findById(id)
     .select('firstName lastName email emailVerified profile')
-  console.log(user)
-  console.log(user)
   return {
     message: 'Successfully found user information',
     ...user.toObject(),

@@ -17,7 +17,6 @@ import typeDefs from './src/graphql/typedefs.js'
 import mongoose, { mongo } from 'mongoose'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
 process.on('uncaughtException', (error) => {
-  console.log(error)
   process.exit(-1)
 })
 // ! db connectiong
@@ -34,9 +33,11 @@ async function StartServer() {
   const setHttpPlugin = {
     async requestDidStart() {
       return {
-        async willSendResponse({ response }) {
-          if (response?.errors) {
-            response.http.status = response?.errors[0]?.status
+        async willSendResponse({ response, context }) {
+          if (response?.errors&&response?.errors[0].status) {
+            response.http.status = response?.errors[0]?.status || 500
+          } else {
+            response.http.status = context?.status || 200
           }
         },
       }
@@ -50,11 +51,10 @@ async function StartServer() {
     resolvers,
     status400ForVariableCoercionErrors: true,
     csrfPrevention: false,
-    context: async ({ req }) => {
-      return req
+    context: async (context) => {
+      return context
     },
     formatError: (err) => {
-      console.log(err)
       return {
         message: err.message || 'Interal server error plase try again',
         status: err.extensions.http.status || 500,
