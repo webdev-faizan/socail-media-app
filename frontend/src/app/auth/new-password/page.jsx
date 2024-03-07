@@ -7,11 +7,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FaRegFaceDizzy } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@apollo/client";
 import { NEW_PASSWORD } from "../../graphql/mutations/auth";
 import { ToastContainer, toast } from "react-toastify";
+import RequireGuest from "../../Components/RequireGuest";
 const fieldIsRequired = "this field is required";
 const schemaSignup = yup.object({
   password: yup
@@ -31,8 +32,10 @@ const schemaSignup = yup.object({
 });
 
 const Newpassword = () => {
+  const [clientSide, setClientSide] = useState(false);
+  const searchParams = typeof window != undefined && useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
-  const searchParams = useSearchParams();
+
   const router = useRouter();
 
   const handleTogglePassword = () => {
@@ -75,6 +78,9 @@ const Newpassword = () => {
       },
     });
   };
+  useEffect(() => {
+    setClientSide(true);
+  }, []);
   return (
     <RequireGuest>
       <ToastContainer />

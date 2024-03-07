@@ -3,7 +3,6 @@ import { IoIosSend } from "react-icons/io";
 import { TfiCommentsSmiley } from "react-icons/tfi";
 import { format } from "date-fns";
 import Avatar from "react-avatar";
-
 import { useQuery } from "@apollo/client";
 import { GET_VIEW_USER_POST } from "../../../graphql/query/post";
 import { GET_VIEW_PERSONAL_INFO } from "../../../graphql/query/profile";
@@ -14,11 +13,13 @@ import LikeButtton from "../../../Components/LikeButtton";
 import Comments from "../../../Components/Comments";
 import CardSkeletonLoader from "../../../Components/loader/CardSkeletonLoader";
 import ProtectRoutes from "../../../Components/ProtectRoutes";
+import { getCookie } from "cookies-next";
+const user_id = getCookie("user_id");
+
 const Page = ({ params }) => {
-  const user_id = params.id[0];
   const { data: userInfo } = useQuery(GET_VIEW_PERSONAL_INFO, {
     variables: {
-      id: user_id,
+      id: params.id[0],
     },
     fetchPolicy: "cache-and-network",
   });
@@ -37,8 +38,8 @@ const Page = ({ params }) => {
   const { data, fetchMore, loading } = useQuery(GET_VIEW_USER_POST, {
     variables: {
       pageNo: 1,
-      limit: 1,
-      id: user_id,
+      limit: 8,
+      id: params.id[0],
     },
     fetchPolicy: "cache-and-network",
     onError: ({ graphQLErrors }) => {
@@ -57,7 +58,7 @@ const Page = ({ params }) => {
       fetchMore({
         variables: {
           id: user_id,
-          limit: 10,
+          limit: 8,
           pageNo: page,
         },
         updateQuery: (prev, { fetchMoreResult }) => {

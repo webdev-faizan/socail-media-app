@@ -59,7 +59,8 @@ const signup = () => {
         secure: true,
         path: "/",
       });
-      router.push("/");
+      window.location.reload();
+      window.location.href = "/";
 
       reset();
     },

@@ -1,17 +1,23 @@
 "use client";
 
+import React from "react";
 import { GET_ALL_POST } from "./graphql/query/post";
 import Cards from "./Components/Cards";
 import ProtectRoutes from "./Components/ProtectRoutes";
-export default function Home() {
+
+const page = () => {
   return (
-    <ProtectRoutes>
-      <div className="mt-[80px] md:mt-[80px]">
-        <Cards query={GET_ALL_POST} />
-      </div>
-    </ProtectRoutes>
+    <>
+      <ProtectRoutes>
+        <div className="mt-[80px] md:mt-[80px]">
+          <Cards query={GET_ALL_POST} />
+        </div>
+      </ProtectRoutes>
+    </>
   );
-}
+};
+
+export default page;
 
 // fetch("/graphql", {
 //   method: "POST",

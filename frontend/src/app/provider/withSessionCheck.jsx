@@ -3,8 +3,11 @@ import { useLazyQuery } from "@apollo/client";
 import { getCookie, hasCookie, deleteCookie } from "cookies-next";
 import { GET_USER_STATUS_QUERY } from "../graphql/query/userStatus.js";
 import React, { createContext, useState, useLayoutEffect } from "react";
+import { useRouter } from "next/navigation";
 export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
+  const router = useRouter();
+
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [token, setToken] = useState(getCookie("auth"));
   const [checkUserStatus] = useLazyQuery(GET_USER_STATUS_QUERY, {
@@ -24,8 +27,11 @@ const AuthProvider = ({ children }) => {
   useLayoutEffect(() => {
     if (!hasCookie("auth") || getCookie("auth").length < 20) {
       setIsAuthenticated(false);
-    } else if (getCookie("auth") != undefined) {
+      router.push("/auth/login");
+      deleteCookie("auth");
+    } else if (getCookie("auth") != "undefined") {
       checkUserStatus();
+      router.push("/");
     }
     window.scrollTo({
       top: 0,

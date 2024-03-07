@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "sma",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,7 +17,9 @@
     "dotenv": "^16.4.1",
     "framer-motion": "^11.0.5",
     "graphql": "^16.8.1",
-    "next": "14.1.0",
+    "i": "^0.3.7",
+    "next": "14.0.0",
+    "npm": "^10.5.0",
     "react": "^18",
     "react-avatar": "^5.0.3",
     "react-content-loader": "^6.2.1",
@@ -25,17 +27,15 @@
     "react-hook-form": "^7.49.3",
     "react-icons": "^5.0.1",
     "react-modal": "^3.16.1",
-    "react-share-social": "^0.1.55",
+    "react-share-social": "0.1.40",
     "react-spinners": "^0.13.1",
     "react-toastify": "^10.0.4",
     "yup": "^1.3.3"
   },
   "devDependencies": {
-    "@types/node": "20.11.8",
-    "@types/react": "18.2.48",
     "autoprefixer": "^10.0.1",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
-    "typescript": "5.3.3"
+    "typescript": "5.4.2"
   }
 }

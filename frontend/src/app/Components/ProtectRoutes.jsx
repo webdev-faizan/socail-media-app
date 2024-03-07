@@ -17,7 +17,9 @@ const ProtectRoutes = ({ children }) => {
   } else {
     deleteCookie("auth");
     deleteCookie("user_id");
-    router.push("/auth/login");
+    if (typeof window !== "undefined") {
+      router.push("/auth/login");
+    }
   }
 };
 export default ProtectRoutes;

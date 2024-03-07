@@ -1,14 +1,18 @@
 "use client";
+import { useSearchParams } from "next/navigation";
 import { useMutation } from "@apollo/client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { VERIFY_EMAIL } from "../../graphql/mutations/auth";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import RequireGuest from "../../Components/RequireGuest";
 
 import { toast, ToastContainer } from "react-toastify";
 const EmailVerificationComponent = () => {
-  const searchParams = useSearchParams();
+  const [clientSide, setClientSide] = useState(false);
+  const searchParams = typeof window!=undefined&& useSearchParams();
+  
+
   const router = useRouter();
   const [mutateFunction, { loading }] = useMutation(VERIFY_EMAIL, {
     fetchPolicy: "no-cache",
@@ -34,6 +38,9 @@ const EmailVerificationComponent = () => {
       },
     });
   };
+  useEffect(() => {
+    setClientSide(true);
+  }, []);
   return (
     <RequireGuest>
       <ToastContainer />

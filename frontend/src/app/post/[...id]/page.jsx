@@ -21,10 +21,9 @@ const page = ({ params }) => {
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
   const [foundPost, setFoundpost] = useState(false);
-  const id = params.id[0].toString();
   const { loading, data } = useQuery(GET_SHARE_POST, {
     variables: {
-      id,
+      id: params.id[0].toString(),
     },
     fetchPolicy: "cache-and-network",
     onError: ({ graphQLErrors }) => {

@@ -5,17 +5,18 @@ import { useQuery } from "@apollo/client";
 import { getCookie } from "cookies-next";
 import Link from "next/link";
 import Avatar from "react-avatar";
+import { TfiCommentsSmiley } from "react-icons/tfi";
+import { IoIosSend } from "react-icons/io";
+import { useSearchParams } from "next/navigation";
 import LikeButtton from "./LikeButtton";
 import Comments from "./Comments";
 import ShareSocailMedial from "./ShareSocailMedial";
 import CardSkeletonLoader from "../Components/loader/CardSkeletonLoader";
-import { useSearchParams } from "next/navigation";
-import { IoIosSend } from "react-icons/io";
-import { TfiCommentsSmiley } from "react-icons/tfi";
 const user_id = getCookie("user_id");
 
 const Cards = ({ query }) => {
-  const searchParams = useSearchParams();
+  const [clientSide, setClientSide] = useState(false);
+  const searchParams = typeof window != undefined && useSearchParams();
   const [postId, setPostId] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
   const ref = useRef(2);
@@ -31,7 +32,7 @@ const Cards = ({ query }) => {
     variables: {
       pageNo: 1,
       limit: 8,
-      ...(window.location.pathname == "/" && {
+      ...(window?.location?.pathname == "/" && {
         query: searchParams.get("query"),
       }),
     },
@@ -90,7 +91,9 @@ const Cards = ({ query }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+  useEffect(() => {
+    setClientSide(true);
+  }, []);
   const POST = data?.getAllPost?.data || data?.getUserPost?.data;
   if (foundPost) {
     return (

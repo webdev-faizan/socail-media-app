@@ -6,6 +6,10 @@ const ShareSocailMedial = ({ showShare, setShowShare, url }) => {
   const closeModal = () => {
     setShowShare(false);
   };
+  let Shareurl = "";
+  if (typeof window != "undefined") {
+    Shareurl = window.location.origin + url;
+  }
   return (
     <Modal
       isOpen={showShare}
@@ -15,7 +19,7 @@ const ShareSocailMedial = ({ showShare, setShowShare, url }) => {
     >
       <div className="w-[95vw] sm:w-[560px]  ">
         <ShareSocial
-          url={window && window.location.origin + url}
+          url={Shareurl}
           style={style}
           socialTypes={["facebook", "twitter", "linkedin", "reddit"]}
         />
