@@ -10,9 +10,11 @@ import { TbLogout2 } from "react-icons/tb";
 import CreatePostModal from "../Components/CreatePostModal";
 import { deleteCookie } from "cookies-next";
 import { GrMenu } from "react-icons/gr";
+import { useApolloClient } from "@apollo/client";
 
 const Navigations = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const client = useApolloClient();
   const path = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -61,7 +63,7 @@ const Navigations = () => {
               onChange={(e) => setQuery(e.target.value)}
               type="text"
               className="h-[40px]  rounded border border-[#e6ebf3] outline-none text-base pl-2 block md:hidden pr-9"
-              style={{width:"calc(100vw - 150px)"}}
+              style={{ width: "calc(100vw - 150px)" }}
             />
             <button className="absolute right-3" type="submit">
               <IoSearchSharp size={20} color="#1a1a1a" />
@@ -145,6 +147,7 @@ const Navigations = () => {
                   onClick={() => {
                     deleteCookie("auth");
                     deleteCookie("user_id");
+                    client.clearStore();
                     router.push("/auth/login");
                   }}
                 >
