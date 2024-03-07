@@ -291,7 +291,6 @@ const signup = () => {
                   class="w-full  false  bg-blue-500 border-blue-500 text-white hover:border-blue-500 hover:bg-blue-700 border-[1px] flex justify-center items-center px-8 py-2 text-md rounded-md  "
                 >
                   {" "}
-                  Login
                   {loading ? "loading..." : "Signup"}
                 </button>
               </div>

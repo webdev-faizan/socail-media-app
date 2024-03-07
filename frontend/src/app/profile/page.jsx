@@ -41,7 +41,7 @@ const page = () => {
     <ProtectRoutes>
       <ToastContainer />
       <ShareSocailMedial
-        url={`/user/${_id}`}
+        url={`/profile/user/${_id}`}
         showShare={showShare}
         setShowShare={setShowShare}
       />
@@ -80,7 +80,7 @@ const page = () => {
         <br />
         <div className="flex justify-center gap-2">
           <Link
-            href={`/user/${_id}`}
+            href={`/profile/user/${_id}`}
             class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
             Preview Profile

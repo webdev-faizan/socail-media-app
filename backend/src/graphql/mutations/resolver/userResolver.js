@@ -37,7 +37,7 @@ const SignupUser = async (_, userInfo, context) => {
     const token = await JwtTokenGenerator(this_user._id, expiresIn)
     const link = `${process.env.BASE_URL}/auth/verify-email?token=${token}`
     const html = VerifedEmailMail(firstName + ' ' + lastName || '', link)
-    // await sendNodemailerMail({ to: email, subject: 'Email Verified', html })
+    await sendNodemailerMail({ to: email, subject: 'Email Verified', html })
     context.status = 2001
     return {
       ...this_user.toObject(),
@@ -181,7 +181,7 @@ export const forgetPassword = async (_, { email }) => {
     await is_user_register.save()
     const link = `${process.env.BASE_URL}/auth/new-password?token=${token}`
     const html = ResetPasswordMail(link, is_user_register.firstName)
-    // await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
+    await sendNodemailerMail({ to: email, subject: 'Forget Password', html })
     return {
       message: 'Token has been dispatched to your email!',
     }

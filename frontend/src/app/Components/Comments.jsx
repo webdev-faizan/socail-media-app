@@ -99,7 +99,7 @@ const Comments = ({ modalIsOpen, closeModal, postId }) => {
               data.getComments &&
               Array.isArray(data.getComments.data) &&
               data?.getComments?.data.map(({ comment, createdAt, user }) => {
-                const { firstName, lastName } = user;
+                const { firstName, lastName, profile } = user;
                 const createdAtDate = new Date(parseInt(createdAt, 10));
                 const CreatedAt = formatDistanceToNow(createdAtDate, {
                   addSuffix: true,
@@ -114,7 +114,7 @@ const Comments = ({ modalIsOpen, closeModal, postId }) => {
                         style={{
                           border: "2px solid gray",
                         }}
-                        // src={`${profile}`}
+                        src={`${profile}`}
                         name={`${firstName ? firstName + " " : ""}${
                           lastName ? lastName : ""
                         }`}

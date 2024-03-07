@@ -30,7 +30,7 @@ const Cards = ({ query }) => {
   const { loading, data, fetchMore } = useQuery(query, {
     variables: {
       pageNo: 1,
-      limit: 3,
+      limit: 8,
       ...(window.location.pathname == "/" && {
         query: searchParams.get("query"),
       }),
@@ -52,7 +52,7 @@ const Cards = ({ query }) => {
     ) {
       fetchMore({
         variables: {
-          limit: 3,
+          limit: 8,
           pageNo: ref.current,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
@@ -126,7 +126,7 @@ const Cards = ({ query }) => {
               } = data;
               const date = new Date(createdAt);
               const postCreatedAt = format(date, "d MMM yyyy");
-              const { firstName, lastName, id: userid } = postOwner;
+              const { firstName, lastName, id: userid, profile } = postOwner;
               const isLikeUser =
                 user_id &&
                 Boolean(
@@ -148,7 +148,7 @@ const Cards = ({ query }) => {
                           style={{
                             border: "2px solid gray",
                           }}
-                          // src={`${profile}`}
+                          src={`${profile}`}
                           name={`${firstName ? firstName + " " : ""}${
                             lastName ? lastName : ""
                           }`}
@@ -174,8 +174,8 @@ const Cards = ({ query }) => {
                     target="_blank"
                   >
                     <img
-                      className="rounded-t-lg h-[250px]"
-                      src="image-1.jpg"
+                      className="rounded-t-lg h-[250px] object-cover object-center"
+                      src={attachment}
                       alt
                     />
                   </Link>

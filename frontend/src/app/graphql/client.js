@@ -14,6 +14,34 @@ const uploadLink = createUploadLink({ uri });
 const httpLink = createHttpLink({
   uri,
 });
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        // Define custom merge functions or cache policies for specific fields
+      },
+    },
+  },
+  addTypename: true, // Automatically add __typename to queries, which can help with cache normalization
+  resultCaching: true, // Enable result caching to reuse query results
+  possibleTypes: {
+    // Define possible types for polymorphic types if necessary
+    // For example, if your schema includes interfaces or unions
+  },
+  dataIdFromObject: (object) => {
+    // Customize the cache key generation based on the object type and id
+    // This function should return a unique identifier for each object in the cache
+  },
+  cacheRedirects: {
+    // Define custom cache redirects for specific queries
+    // Cache redirects allow you to customize how Apollo Client reads from and writes to the cache
+  },
+  // Additional cache options
+  // fragmentMatcher: /* Define your fragment matcher function here */
+  freezeResults: false, // Set to true to freeze query results before caching them
+});
+
 const authLink = setContext((_, { headers }) => {
   const token = getCookie("auth");
   return {
@@ -26,16 +54,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: concat(authLink, uploadLink, httpLink),
-  cache: new InMemoryCache({
-    // typePolicies: {
-    //   post: {
-    //     keyFields: ["all_post", "user_post", "share_post"],
-    //   },
-    //   profile: {
-    //     keyFields: ["user_profile", "share_profile"],
-    //   },
-    // },
-  }),
+  cache,
 });
 
 export default client;

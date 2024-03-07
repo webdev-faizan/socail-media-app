@@ -8,6 +8,7 @@ import { FaWindowClose } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { CREATE_POST } from "../../app/graphql/mutations/post";
 import { ToastContainer, toast } from "react-toastify";
+import { GET_USER_POST, GET_ALL_POST } from "../graphql/query/post";
 
 const fieldIsRequired = "this field is required";
 const schemaCreatePost = yup.object({
@@ -21,8 +22,8 @@ const schemaCreatePost = yup.object({
     .string()
     .trim()
     .required(fieldIsRequired)
-    .min(10, "min length must be at least 20 characters")
-    .max(50, " the description to less than 20 characters."),
+    .min(50, "min length must be at least 50 characters")
+    .max(100, " the description to less than 100 characters."),
   // atttachment: yup
   //   .mixed()
   //   .required(fieldIsRequired)
@@ -55,6 +56,8 @@ const customStyles = {
 };
 
 const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
+  const [file, setfile] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -66,14 +69,6 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
   });
   const [MutationFunction, { loading }] = useMutation(CREATE_POST, {
     fetchPolicy: "no-cache",
-    onCompleted: ({ createPost }) => {
-      toast.success(createPost.message, {
-        autoClose: false,
-      });
-    },
-    onError: ({ message }) => {
-      toast.error(message);
-    },
   });
   const useref = useRef();
   const onSubmit = async (data) => {
@@ -87,9 +82,12 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
           description,
         },
       },
-      onCompleted: () => {
+      onCompleted: ({ createPost }) => {
+        toast.success(createPost.message);
         reset();
         useref.current.destroy();
+        setfile("");
+        closeModal();
       },
       onError: ({ networkError }) => {
         if (networkError) {
@@ -128,14 +126,7 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                     {useref?.current?.files && (
                       <img
                         className="w-full  h-[200px] object-center object-cover"
-                        src={
-                          useref &&
-                          useref.current &&
-                          useref.current.files &&
-                          useref.current.files[0]
-                            ? URL.createObjectURL(useref.current.files[0])
-                            : ""
-                        }
+                        src={file ? URL.createObjectURL(file) : ""}
                         alt="Selected Image"
                       />
                     )}
@@ -151,6 +142,7 @@ const CreatePostModal = ({ closeModal, openModal, modalIsOpen }) => {
                         accept="Image/*"
                         required
                         ref={useref}
+                        onChange={(e) => setfile(e.target.files[0])}
                         // {...register("atttachment")}
                         className="border-[1px] h-[36px] w-full rounded-md text-[#BDBDBD] focus:border-[#b4b4b4] flex items-center p-[2px] border-[#D0D3E8] border-solid outline-none"
                         placeholder="Title"

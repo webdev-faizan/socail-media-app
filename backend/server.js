@@ -28,7 +28,6 @@ mongoose
   .catch((error) => {
     console.error('Failed to establish a connection to the database', error)
   })
-
 async function StartServer() {
   const setHttpPlugin = {
     async requestDidStart() {
@@ -98,6 +97,6 @@ async function StartServer() {
 
 StartServer()
 process.on('unhandledRejection', (error) => {
-  console.log(error)
+  console.log(error, 'unhandledRejection')
   process.exit(-1)
 })

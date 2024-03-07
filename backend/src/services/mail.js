@@ -28,7 +28,6 @@ const sendNodemailerMail = async ({
 
     return transporter.sendMail(mailOptions)
   } catch (error) {
-    console.log(error)
   }
 }
 

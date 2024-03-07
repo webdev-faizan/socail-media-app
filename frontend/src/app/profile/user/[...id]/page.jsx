@@ -143,7 +143,7 @@ const Page = ({ params }) => {
                 } = data;
                 const date = new Date(createdAt);
                 const postCreatedAt = format(date, "d MMM yyyy");
-                const { firstName, lastName, _id: userid } = postOwner;
+                const { firstName, lastName, _id: userid, profile } = postOwner;
                 const isLikeUser =
                   user_id &&
                   Boolean(
@@ -162,10 +162,16 @@ const Page = ({ params }) => {
                     >
                       <div className="flex items-center p-2 ">
                         <div className="flex-shrink-0">
-                          <img
-                            className="w-10 h-10 rounded-full object-center border-2"
-                            src="/image-1.jpg"
-                            alt="Neil image"
+                          <Avatar
+                            style={{
+                              border: "2px solid gray",
+                            }}
+                            src={`${profile}`}
+                            name={`${firstName ? firstName + " " : ""}${
+                              lastName ? lastName : ""
+                            }`}
+                            size={40}
+                            round={true}
                           />
                         </div>
                         <div className="flex-1 min-w-0 ms-4">
@@ -187,7 +193,7 @@ const Page = ({ params }) => {
                     >
                       <img
                         className="rounded-t-lg h-[250px]"
-                        src="image-1.jpg"
+                        src={attachment}
                         alt
                       />
                     </Link>

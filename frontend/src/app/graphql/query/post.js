@@ -16,6 +16,7 @@ export const GET_ALL_POST = gql`
           firstName
           lastName
           id
+          profile
         }
       }
     }
@@ -37,6 +38,8 @@ export const GET_USER_POST = gql`
           firstName
           lastName
           id
+          profile
+
         }
       }
     }
@@ -52,6 +55,8 @@ export const GET_COMMENTS = gql`
         user {
           firstName
           lastName
+          profile
+
         }
       }
     }
@@ -75,6 +80,8 @@ export const GET_SHARE_POST = gql`
           lastName
           id
           email
+          profile
+
         }
       }
     }

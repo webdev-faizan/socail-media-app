@@ -79,7 +79,7 @@ const page = ({ params }) => {
             } = data;
             const date = new Date(createdAt);
             const postCreatedAt = format(date, "d MMM yyyy");
-            const { firstName, lastName, id: userid } = postOwner;
+            const { firstName, lastName, id: userid, profile } = postOwner;
             const isLikeUser =
               user_id &&
               Boolean(
@@ -104,7 +104,7 @@ const page = ({ params }) => {
                         style={{
                           border: "2px solid gray",
                         }}
-                        // src={`${profile}`}
+                        src={`${profile}`}
                         name={`${firstName ? firstName + " " : ""}${
                           lastName ? lastName : ""
                         }`}
@@ -131,7 +131,7 @@ const page = ({ params }) => {
                 >
                   <img
                     className="rounded-t-lg h-[250px]"
-                    src="image-1.jpg"
+                    src={attachment}
                     alt
                   />
                 </Link>

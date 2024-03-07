@@ -27,7 +27,7 @@ export const getAllPostsResolver = async (
       $text: { $search: query },
     })
       .select('-comments')
-      .populate('postOwner', 'firstName lastName email _id')
+      .populate('postOwner', 'firstName lastName email _id profile')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -49,7 +49,7 @@ export const getAllPostsResolver = async (
 
   const allPosts = await PostModel.find({})
     .select('-comments')
-    .populate('postOwner', 'firstName lastName email _id')
+    .populate('postOwner', 'firstName lastName email _id profile')
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
@@ -83,7 +83,7 @@ export const getUserPostsResolver = async (
     postOwner: id,
   })
     .select('-comments')
-    .populate('postOwner', 'firstName lastName email _id')
+    .populate('postOwner', 'firstName lastName email _id profile')
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
@@ -109,7 +109,7 @@ export const getCommentsResolver = async (_, { postId }, context) => {
     .find({ postId })
     .sort({ createdAt: -1 })
     .select('comment createdAt')
-    .populate('user', 'firstName lastName')
+    .populate('user', 'firstName lastName profile')
   return {
     message: 'successfully get comments',
     data: getComments,
@@ -130,7 +130,7 @@ export const getSharePostResolver = async (_, { id }, context) => {
   }
   const userinfo = await PostModel.findById(id).populate(
     'postOwner',
-    'firstName lastName email _id',
+    'firstName lastName email _id profile',
   )
   if (userinfo.length == 0) {
     throw new GraphQLError('Not found any post', {
@@ -174,7 +174,7 @@ export const getViewUserPostsResolver = async (
     postOwner: id,
   })
     .select('-comments')
-    .populate('postOwner', 'firstName lastName email _id')
+    .populate('postOwner', 'firstName lastName email _id profile')
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)

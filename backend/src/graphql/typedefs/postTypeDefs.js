@@ -109,6 +109,7 @@ type UserInfo {
   id: ID
   firstName: String
   lastName: String
+  profile: String
 }
 
 type CommentInfo {
