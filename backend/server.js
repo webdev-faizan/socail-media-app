@@ -34,10 +34,11 @@ async function StartServer() {
     async requestDidStart() {
       return {
         async willSendResponse({ response, context }) {
-          if (response?.errors&&response?.errors[0].status) {
+          if (response?.errors && response?.errors[0].status) {
             response.http.status = response?.errors[0]?.status || 500
           } else {
-            response.http.status = context?.status || 200
+            // response.http.status = context?.status || 200
+            response.http.status = 200
           }
         },
       }

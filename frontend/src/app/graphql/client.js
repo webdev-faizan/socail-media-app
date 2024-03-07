@@ -26,7 +26,17 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: concat(authLink, uploadLink, httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    // typePolicies: {
+    //   post: {
+    //     keyFields: ["all_post", "user_post", "share_post"],
+    //   },
+    //   profile: {
+    //     keyFields: ["user_profile", "share_profile"],
+    //   },
+    // },
+  }),
 });
 
 export default client;
+// Faraid@11

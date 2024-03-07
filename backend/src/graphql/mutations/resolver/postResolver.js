@@ -98,3 +98,4 @@ export const likeResolver = async (_, { postId }, context) => {
     message: 'Like remove successfully',
   }
 }
+

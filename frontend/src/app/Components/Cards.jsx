@@ -47,7 +47,7 @@ const Cards = ({ query }) => {
   });
   const handleScroll = () => {
     if (
-      window.pageYOffset + window.innerHeight + 5 >
+      window.pageYOffset + window.innerHeight + 2 >
       document.documentElement.scrollHeight
     ) {
       fetchMore({
@@ -56,13 +56,28 @@ const Cards = ({ query }) => {
           pageNo: ref.current,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
-          if (fetchMoreResult.getAllPost.data.length > 0) {
+          if (fetchMoreResult?.getAllPost?.data?.length > 0) {
             ref.current += 1;
             return {
-              ...prev,
-              ...fetchMoreResult,
+              getAllPost: {
+                data: [
+                  ...prev.getAllPost.data,
+                  ...fetchMoreResult.getAllPost.data,
+                ],
+              },
+            };
+          } else if (fetchMoreResult?.getUserPost?.data?.length > 0) {
+            ref.current += 1;
+            return {
+              getUserPost: {
+                data: [
+                  ...prev.getUserPost.data,
+                  ...fetchMoreResult.getUserPost.data,
+                ],
+              },
             };
           }
+          return prev;
         },
       });
     }
