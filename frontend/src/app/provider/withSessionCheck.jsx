@@ -17,6 +17,11 @@ const AuthProvider = ({ children }) => {
         setToken(getCookie("auth"));
         return;
       } else {
+        if (window.location.pathname.startsWith == "/auth") {
+          router.push(window.location.pathname);
+        } else {
+          router.push("/auth/login");
+        }
         if (!window.location.pathname.startsWith("/auth")) {
           deleteCookie("auth");
           deleteCookie("user_id");
@@ -27,7 +32,7 @@ const AuthProvider = ({ children }) => {
   useLayoutEffect(() => {
     if (!hasCookie("auth") || getCookie("auth").length < 20) {
       setIsAuthenticated(false);
-      router.push("/auth/login");
+      router.push(window.location.pathname);
       deleteCookie("auth");
     } else if (getCookie("auth") != "undefined") {
       checkUserStatus();

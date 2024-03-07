@@ -9,9 +9,7 @@ import RequireGuest from "../../Components/RequireGuest";
 
 import { toast, ToastContainer } from "react-toastify";
 const EmailVerificationComponent = () => {
-  const [clientSide, setClientSide] = useState(false);
-  const searchParams = typeof window!=undefined&& useSearchParams();
-  
+  const searchParams = typeof window != undefined && useSearchParams();
 
   const router = useRouter();
   const [mutateFunction, { loading }] = useMutation(VERIFY_EMAIL, {
@@ -38,9 +36,7 @@ const EmailVerificationComponent = () => {
       },
     });
   };
-  useEffect(() => {
-    setClientSide(true);
-  }, []);
+
   return (
     <RequireGuest>
       <ToastContainer />
