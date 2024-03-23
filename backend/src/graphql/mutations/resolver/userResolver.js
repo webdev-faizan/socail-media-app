@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 import { JwtTokenDecode, JwtTokenGenerator } from '../../../lib/jwt.js'
 import userModel from '../../../model/userModel.js'
@@ -42,9 +41,6 @@ const SignupUser = async (_, userInfo, context) => {
     return {
       ...this_user.toObject(),
       message: 'User successfully registered!',
-      extenstions: {
-        status: 201,
-      },
     }
   }
 }
