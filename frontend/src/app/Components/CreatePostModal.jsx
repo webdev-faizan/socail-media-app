@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,8 +8,6 @@ import { FaWindowClose } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { CREATE_POST } from "../../app/graphql/mutations/post";
 import { ToastContainer, toast } from "react-toastify";
-import { GET_USER_POST, GET_ALL_POST } from "../graphql/query/post";
-
 const fieldIsRequired = "this field is required";
 const schemaCreatePost = yup.object({
   title: yup
